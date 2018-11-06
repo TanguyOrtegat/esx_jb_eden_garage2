@@ -17,6 +17,15 @@ features:
 - code optimisation with ft_libs
 - ...
 
+do not forget to update your sql:
+
+```
+ALTER TABLE `owned_vehicles` ADD INDEX `vehsowned` (`owner`);
+ALTER TABLE `owned_vehicles` ADD `fourrieremecano` BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Etat de la voiture' AFTER `owner`;
+ALTER TABLE `owned_vehicles` ADD `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture';
+```
+
+
 if you want the impound of police and mecano to work, paste those lines when you take your duty:
 
 ```	  
