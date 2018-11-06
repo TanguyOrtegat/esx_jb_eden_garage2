@@ -25,3 +25,12 @@ exports.ft_libs:EnableArea("esx_eden_garage_area_police_mecanospawnpoint")
 exports.ft_libs:EnableArea("esx_eden_garage_area_Bennys_mecanodeletepoint")
 exports.ft_libs:EnableArea("esx_eden_garage_area_Bennys_mecanospawnpoint")
 ```
+
+and offduty:
+
+```
+exports.ft_libs:DisableArea("esx_eden_garage_area_police_mecanodeletepoint")
+exports.ft_libs:DisableArea("esx_eden_garage_area_police_mecanospawnpoint")	  
+exports.ft_libs:DisableArea("esx_eden_garage_area_Bennys_mecanodeletepoint")
+exports.ft_libs:DisableArea("esx_eden_garage_area_Bennys_mecanospawnpoint")
+```
