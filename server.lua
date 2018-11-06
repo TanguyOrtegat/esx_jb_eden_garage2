@@ -4,15 +4,21 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 
 --Recupere les véhicules
-ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb)
+ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindOfVehicle)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = {}
+	local identifier = ""
+	if KindOfVehicle ~= "personal" then
+		identifier = KindOfVehicle
+	else
+		identifier = xPlayer.getIdentifier()
+	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = xPlayer.getIdentifier()}, function(data) 
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = identifier}, function(data) 
 		for _,v in pairs(data) do
 			local vehicle = json.decode(v.vehicle)
-			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano})
+			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, id = v.id, vehiclename = v.vehiclename})
 		end
 		cb(vehicules)
 	end)
@@ -22,13 +28,12 @@ end)
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
 	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = {}
 
 	MySQL.Async.fetchAll("select * from owned_vehicles inner join characters on owned_vehicles.owner = characters.identifier where fourrieremecano=@fourrieremecano",{['@fourrieremecano'] = true}, function(data) 
 		for _,v in pairs(data) do
 			local vehicle = json.decode(v.vehicle)
-			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, firstname = v.firstname, lastname = v.lastname})
+			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, firstname = v.firstname, lastname = v.lastname, id = v.id})
 		end
 		cb(vehicules)
 	end)
@@ -36,19 +41,27 @@ end)
 -- Fin --Recupere les véhicules
 
 --Stock les véhicules
-ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps)
+ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps, KindOfVehicle)
 	local isFound = false
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
-	local vehicules = getPlayerVehicles(xPlayer.getIdentifier())
+	local identifier = ""
+	if KindOfVehicle ~= "personal" then
+		identifier = KindOfVehicle
+	else
+		identifier = xPlayer.getIdentifier()
+	end
+	local vehicules = getPlayerVehicles(identifier)
 	local plate = vehicleProps.plate
+	plate = string.gsub(plate, "%s+", "")
 
 	
 	for _,v in pairs(vehicules) do
-		if(plate == v.plate)then
+		
+		if(plate == string.gsub(v.plate, "%s+", ""))then
 			local idveh = v.id
 			local vehprop = json.encode(vehicleProps)
-			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE id=@id",{['@vehprop'] = vehprop, ['@id'] = v.id})
+			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE id=@id",{['@vehprop'] = vehprop, ['@id'] = idveh})
 			isFound = true
 			break
 		end		
@@ -81,17 +94,23 @@ end)
 
 --Change le state du véhicule
 RegisterServerEvent('eden_garage:modifystate')
-AddEventHandler('eden_garage:modifystate', function(vehicleProps, state)
+AddEventHandler('eden_garage:modifystate', function(vehicleProps, state, KindOfVehicle)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
-	local vehicules = getPlayerVehicles(xPlayer.getIdentifier())
+	local identifier = ""
+	if KindOfVehicle ~= "personal" then
+		identifier = KindOfVehicle
+	else
+		identifier = xPlayer.getIdentifier()
+	end
+	local vehicules = getPlayerVehicles(identifier)
 	local plate = vehicleProps.plate
 	local state = state
 
 	for _,v in pairs(vehicules) do
 		if(plate == v.plate)then
 			local idveh = v.id
-			MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE id=@id",{['@state'] = state , ['@id'] = v.id})
+			MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE id=@id",{['@state'] = state , ['@id'] = idveh})
 			break
 		end		
 	end
@@ -101,11 +120,8 @@ end)
 RegisterServerEvent('eden_garage:ChangeStateFromFourriereMecano')
 AddEventHandler('eden_garage:ChangeStateFromFourriereMecano', function(vehicleProps, fourrieremecano)
 	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
-	local vehicules = getPlayerVehicles(xPlayer.getIdentifier())
 	local plate = vehicleProps.plate
 	local fourrieremecano = fourrieremecano
-	print(fourrieremecano)
 	
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles",{}, function(result) 
 		for i=1, #result,1 do
@@ -121,23 +137,26 @@ AddEventHandler('eden_garage:ChangeStateFromFourriereMecano', function(vehiclePr
 end)
 
 
+RegisterServerEvent('eden_garage:renamevehicle')
+AddEventHandler('eden_garage:renamevehicle', function(vehicleid, name)
+	MySQL.Sync.execute("UPDATE owned_vehicles SET vehiclename =@vehiclename WHERE id=@id",{['@vehiclename'] = name , ['@id'] = vehicleid})
+end)
 
-
-
-
---Fonction qui récupere les plates
-
--- Fin Fonction qui récupere les plates
-
-ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb)	
+ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, KindOfVehicle)	
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = {}
+	local identifier = ""
+	if KindOfVehicle ~= "personal" then
+		identifier = KindOfVehicle
+	else
+		identifier = xPlayer.getIdentifier()
+	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier AND state=false",{['@identifier'] = xPlayer.getIdentifier()}, function(data) 
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier AND state=false",{['@identifier'] = identifier}, function(data) 
 		for _,v in pairs(data) do
 			local vehicle = json.decode(v.vehicle)
-			table.insert(vehicules, {vehicle =vehicle, fourrieremecano = v.fourrieremecano})
+			table.insert(vehicules, {vehicle =vehicle, fourrieremecano = v.fourrieremecano, vehiclename =  v.vehiclename})
 		end
 		cb(vehicules)
 	end)
@@ -173,7 +192,6 @@ end)
 
 --Recupere les vehicules
 function getPlayerVehicles(identifier)
-	
 	local vehicles = {}
 	local data = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = identifier})	
 	for _,v in pairs(data) do
@@ -231,11 +249,11 @@ end
 
 
 -- Fonction qui change les etats sorti en rentré lors d'un restart
-AddEventHandler('onMySQLReady', function()
+-- AddEventHandler('onMySQLReady', function()
 
-	MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
+	-- MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
 
-end)
+-- end)
 -- Fin Fonction qui change les etats sorti en rentré lors d'un restart
 
 function dump(o, nb)

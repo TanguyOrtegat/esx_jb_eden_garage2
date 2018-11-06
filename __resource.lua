@@ -1,9 +1,11 @@
+dependency 'ft_libs'
+
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
+	'server.lua',
 	'config.lua',
-	'server.lua'
 }
 client_script {
+	'client.lua',
 	'config.lua',
-	'client.lua'
 }
