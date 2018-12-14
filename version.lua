@@ -21,21 +21,12 @@ function checkVersion()
           patchnote = patchnote..line.."\n"
         end
 
-        print(replaceString(getText("new_version_available"), {VERSION, gitVersion}))
-        print(replaceString(getText("new_version_patchnote"), {patchnote}))
+        print("Une nouvelle version de esx_eden_garage2 est disponible: "..gitVersion}))
+        print("patchnote: \n"patchnote))
         print("\n=================================\n")
       end
     else
       print(getText("cant_get_version"))
     end
   end, "GET")
-end
-
-
-function replaceString(str, args)
-	for i=1,#args do
-		str = string.gsub(str, "#VALUE#", args[i], 1)
-	end
-
-	return str
 end
