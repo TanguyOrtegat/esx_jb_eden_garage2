@@ -176,6 +176,7 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 				function(data2, menu2)
 					if data2.current.value == "get_vehicle_out" then
 						if (data.current.value.state) then
+							menu.close()
 							menu2.close()
 							SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
 						else
