@@ -253,42 +253,46 @@ function StockVehicleMenu(KindOfVehicle)
 	local playerPed  = GetPlayerPed(-1)
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
-		local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
-		local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-		local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
-		if GotTrailer then
-			ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
-				if(valid) then
-					local trailerplate = GetVehicleNumberPlateText(TrailerHandle)
-					for k,v in pairs (carInstance) do
-						if v.plate == trailerplate then
-							table.remove(carInstance, k)
+		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
+			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
+			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
+			if GotTrailer then
+				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
+					if(valid) then
+						local trailerplate = GetVehicleNumberPlateText(TrailerHandle)
+						for k,v in pairs (carInstance) do
+							if v.plate == trailerplate then
+								table.remove(carInstance, k)
+							end
 						end
+						DeleteVehicle(TrailerHandle)
+						TriggerServerEvent('eden_garage:modifystate', trailerProps, true, KindOfVehicle)
+						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
+					else
+						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
-					DeleteVehicle(TrailerHandle)
-					TriggerServerEvent('eden_garage:modifystate', trailerProps, true, KindOfVehicle)
-					TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
-				else
-					TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
-				end
-			end,trailerProps, KindOfVehicle)
-			hasAlreadyEnteredMarker = false
+				end,trailerProps, KindOfVehicle)
+				hasAlreadyEnteredMarker = false
+			else
+				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
+					if(valid) then
+						local vehicleplate = GetVehicleNumberPlateText(vehicle)
+						for k,v in pairs (carInstance) do
+							if v.plate == vehicleplate then
+								table.remove(carInstance, k)
+							end
+						end
+						DeleteVehicle(vehicle)
+						TriggerServerEvent('eden_garage:modifystate', vehicleProps, true, KindOfVehicle)
+						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
+					else
+						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
+					end
+				end,vehicleProps, KindOfVehicle)
+			end
 		else
-			ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
-				if(valid) then
-					local vehicleplate = GetVehicleNumberPlateText(vehicle)
-					for k,v in pairs (carInstance) do
-						if v.plate == vehicleplate then
-							table.remove(carInstance, k)
-						end
-					end
-					DeleteVehicle(vehicle)
-					TriggerServerEvent('eden_garage:modifystate', vehicleProps, true, KindOfVehicle)
-					TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
-				else
-					TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
-				end
-			end,vehicleProps, KindOfVehicle)
+			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
 		end
 	else
 		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
