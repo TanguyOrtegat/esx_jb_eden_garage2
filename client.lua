@@ -175,12 +175,14 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 				},
 				function(data2, menu2)
 					if data2.current.value == "get_vehicle_out" then
-						if (data.current.value.state) then
-							menu.close()
-							menu2.close()
-							SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
+						if (data.current.value.fourrieremecano) then
+						    TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
+						elseif (data.current.value.state) then
+						    menu.close()
+						    menu2.close()
+						    SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
 						else
-							TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
+						    TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
 						end
 					elseif data2.current.value == "rename_vehicle" then
 						AddTextEntry('FMMC_KEY_TIP8', "Nom du véhicule souhaité")
