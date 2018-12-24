@@ -24,9 +24,6 @@
  - ...	
  
   
-  do not forget to update your sql:	 - Certains véhicules sont impossible à rentrer
- - En cherchant bien il est possible de dupliquer les véhicules
- 
   
  ```
  ALTER TABLE `owned_vehicles` ADD INDEX `vehsowned` (`owner`);	
