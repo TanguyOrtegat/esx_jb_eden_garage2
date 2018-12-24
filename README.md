@@ -54,6 +54,7 @@ exports.ft_libs:DisableArea("esx_eden_garage_area_Bennys_mecanospawnpoint")
 ```
  
 #UPDATE
+
 if you haven't plate column:
 ```
 ALTER TABLE owned_vehicle add plate varchar(50) NOT NULL;
