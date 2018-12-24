@@ -3,5 +3,6 @@
   "patchnote" : [
     "- fix bug with mecano fourriere",
     "- ADDED supporrt for plate as PK",
+    "- server code optimisation",
   ]
 }
