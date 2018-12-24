@@ -81,13 +81,9 @@ end)
 --Fonction Menu
 
 function OpenMenuGarage(garage, KindOfVehicle)
-	
-	
 	ESX.UI.Menu.CloseAll()
 
 	local elements = {
-		-- {label = "Liste des véhicules", value = 'list_vehicles'},
-		-- {label = "Rentrer vehicules", value = 'stock_vehicle'},
 		{label = "Retour vehicule ("..Config.Price.."$)", value = 'return_vehicle'},
 	}
 
@@ -102,24 +98,12 @@ function OpenMenuGarage(garage, KindOfVehicle)
 		function(data, menu)
 
 			menu.close()
-			-- if(data.current.value == 'list_vehicles') then
-				-- ListVehiclesMenu()
-			-- end
-			-- if(data.current.value == 'stock_vehicle') then
-				-- StockVehicleMenu()
-			-- end
 			if(data.current.value == 'return_vehicle') then
 				ReturnVehicleMenu(garage, KindOfVehicle)
 			end
-
-			local playerPed = GetPlayerPed(-1)
-			SpawnVehicle(data.current.value, garage, KindOfVehicle)
-			--local coords    = societyConfig.Zones.VehicleSpawnPoint.Pos
-
 		end,
 		function(data, menu)
 			menu.close()
-			--CurrentAction = 'open_garage_action'
 		end
 	)	
 end
@@ -175,15 +159,15 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 				},
 				function(data2, menu2)
 					if data2.current.value == "get_vehicle_out" then
-						if (data.current.value.fourrieremecano) then
-						    TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
-						elseif (data.current.value.state) then
-						    menu.close()
-						    menu2.close()
-						    SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
-						else
-						    TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
-						end
+                        if (data.current.value.fourrieremecano) then
+                            TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
+                        elseif (data.current.value.state) then
+                            menu.close()
+                            menu2.close()
+                            SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
+                        else
+                            TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
+                        end
 					elseif data2.current.value == "rename_vehicle" then
 						AddTextEntry('FMMC_KEY_TIP8', "Nom du véhicule souhaité")
 						DisplayOnscreenKeyboard(false, "FMMC_KEY_TIP8", "", "", "", "", "", 64)
@@ -193,7 +177,7 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 						end
 						if (GetOnscreenKeyboardResult()) then
 							local name = GetOnscreenKeyboardResult()
-							TriggerServerEvent('eden_garage:renamevehicle', data.current.value.id, name)
+							TriggerServerEvent('eden_garage:renamevehicle', data.current.value.plate, name)
 						end
 					end
 				end,
@@ -256,46 +240,42 @@ function StockVehicleMenu(KindOfVehicle)
 	local playerPed  = GetPlayerPed(-1)
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
-		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
-			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
-			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
-			if GotTrailer then
-				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
-					if(valid) then
-						local trailerplate = GetVehicleNumberPlateText(TrailerHandle)
-						for k,v in pairs (carInstance) do
-							if v.plate == trailerplate then
-								table.remove(carInstance, k)
-							end
+		local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+		local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
+		local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
+		if GotTrailer then
+			ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
+				if(valid) then
+					local trailerplate = GetVehicleNumberPlateText(TrailerHandle)
+					for k,v in pairs (carInstance) do
+						if v.plate == trailerplate then
+							table.remove(carInstance, k)
 						end
-						DeleteVehicle(TrailerHandle)
-						TriggerServerEvent('eden_garage:modifystate', trailerProps, true, KindOfVehicle)
-						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
-					else
-						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
-				end,trailerProps, KindOfVehicle)
-				hasAlreadyEnteredMarker = false
-			else
-				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
-					if(valid) then
-						local vehicleplate = GetVehicleNumberPlateText(vehicle)
-						for k,v in pairs (carInstance) do
-							if v.plate == vehicleplate then
-								table.remove(carInstance, k)
-							end
-						end
-						DeleteVehicle(vehicle)
-						TriggerServerEvent('eden_garage:modifystate', vehicleProps, true, KindOfVehicle)
-						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
-					else
-						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
-					end
-				end,vehicleProps, KindOfVehicle)
-			end
+					DeleteVehicle(TrailerHandle)
+					TriggerServerEvent('eden_garage:modifystate', trailerProps, true, KindOfVehicle)
+					TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
+				else
+					TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
+				end
+			end,trailerProps, KindOfVehicle)
+			hasAlreadyEnteredMarker = false
 		else
-			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
+			ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
+				if(valid) then
+					local vehicleplate = GetVehicleNumberPlateText(vehicle)
+					for k,v in pairs (carInstance) do
+						if v.plate == vehicleplate then
+							table.remove(carInstance, k)
+						end
+					end
+					DeleteVehicle(vehicle)
+					TriggerServerEvent('eden_garage:modifystate', vehicleProps, true, KindOfVehicle)
+					TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
+				else
+					TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
+				end
+			end,vehicleProps, KindOfVehicle)
 		end
 	else
 		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
@@ -357,7 +337,8 @@ function SpawnVehicle(vehicle, garage, KindOfVehicle)
 			local carplate = GetVehicleNumberPlateText(callback_vehicle)
 			table.insert(carInstance, {vehicleentity = callback_vehicle, plate = carplate})
 			if KindOfVehicle == 'brewer' or KindOfVehicle == 'joaillerie' or KindOfVehicle == 'fermier' or KindOfVehicle == 'fisherman' or KindOfVehicle == 'fuel' or KindOfVehicle == 'johnson' or KindOfVehicle == 'miner' or KindOfVehicle == 'reporter' or KindOfVehicle == 'vignerons' or KindOfVehicle == 'tabac' then
-				TriggerEvent('esx_jobs:addplate', carplate)
+				TriggerEvent('esx_jobs1:addplate', carplate)
+				TriggerEvent('esx_jobs2:addplate', carplate)
 			end	
 		end)
 	TriggerServerEvent('eden_garage:modifystate', vehicle, false, KindOfVehicle)
@@ -417,7 +398,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 		function(data, menu)
 			if data.current.value == 'fourrieremecano' then
 				ESX.ShowNotification("Va voir la police ou mecano pour savoir comment recuperer ton véhicule.")
-			else
+			elseif data.current.value ~= nil then
 				local iscaronearth = false
 				for k,v in pairs (carInstance) do
 					if v.plate == data.current.value.plate then

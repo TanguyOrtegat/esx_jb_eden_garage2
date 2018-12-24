@@ -1,7 +1,7 @@
 {
-  "version":"1.1.0",
+  "version":"2.0.0",
   "patchnote" : [
-    "- duplication bug when sitting on other seat then driver's fixed",
-    "- version check added",
+    "- fix bug with mecano fourriere",
+    "- ADDED supporrt for plate as PK",
   ]
 }

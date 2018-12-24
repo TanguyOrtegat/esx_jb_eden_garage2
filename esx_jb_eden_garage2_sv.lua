@@ -18,7 +18,7 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindO
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = identifier}, function(data) 
 		for _,v in pairs(data) do
 			local vehicle = json.decode(v.vehicle)
-			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, id = v.id, vehiclename = v.vehiclename})
+			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, plate = v.plate, vehiclename = v.vehiclename})
 		end
 		cb(vehicules)
 	end)
@@ -33,7 +33,7 @@ ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
 	MySQL.Async.fetchAll("select * from owned_vehicles inner join characters on owned_vehicles.owner = characters.identifier where fourrieremecano=@fourrieremecano",{['@fourrieremecano'] = true}, function(data) 
 		for _,v in pairs(data) do
 			local vehicle = json.decode(v.vehicle)
-			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, firstname = v.firstname, lastname = v.lastname, id = v.id})
+			table.insert(vehicules, {vehicle = vehicle, state = v.state, fourrieremecano = v.fourrieremecano, firstname = v.firstname, lastname = v.lastname, plate = v.plate})
 		end
 		cb(vehicules)
 	end)
@@ -42,104 +42,62 @@ end)
 
 --Stock les véhicules
 ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps, KindOfVehicle)
-	local isFound = false
+	local identifier = ""
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
-	local identifier = ""
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
 		identifier = xPlayer.getIdentifier()
 	end
-	local vehicules = getPlayerVehicles(identifier)
-	local plate = vehicleProps.plate
-	plate = string.gsub(plate, "%s+", "")
-
-	
-	for _,v in pairs(vehicules) do
-		
-		if(plate == string.gsub(v.plate, "%s+", ""))then
-			local idveh = v.id
+	local vehplate = vehicleProps.plate
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate",{['@plate'] = vehplate}, function(result) 
+		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
-			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE id=@id",{['@vehprop'] = vehprop, ['@id'] = idveh})
-			isFound = true
-			break
-		end		
-	end
-	cb(isFound)
+			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE plate=@plate",{['@vehprop'] = vehprop, ['@plate'] = vehplate})
+			cb(true)
+		else
+			cb(false)
+		end
+	end)
 end)
 --Fin stock les vehicules
 
 ESX.RegisterServerCallback('eden_garage:stockvmecano',function(source,cb, vehicleProps)
 	local plate = vehicleProps.plate
 	
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles",{}, function(result) 
-		-- for k,v in pairs(result) do
-		local isFound = false
-		for i=1, #result,1 do
-			local vehicle = json.decode(result[i].vehicle)
-
-			local vehicleplate = vehicle.plate
-			if (plate == vehicleplate) then
-				local vehprop = json.encode(vehicleProps)
-				
-				MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE id=@id",{['@vehprop'] = vehprop, ['@id'] = result[i].id})
-				isFound = true
-				break
-			end
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate",{['@plate'] = plate}, function(result) 
+		if result[1] ~= nil then
+			local vehprop = json.encode(vehicleProps)
+			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE plate=@plate",{['@vehprop'] = vehprop, ['@plate'] = plate})
+			cb(true)
+		else
+			cb(false)
 		end
-		cb(isFound)
 	end)
 end)
 
 --Change le state du véhicule
 RegisterServerEvent('eden_garage:modifystate')
 AddEventHandler('eden_garage:modifystate', function(vehicleProps, state, KindOfVehicle)
-	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
-	local identifier = ""
-	if KindOfVehicle ~= "personal" then
-		identifier = KindOfVehicle
-	else
-		identifier = xPlayer.getIdentifier()
-	end
-	local vehicules = getPlayerVehicles(identifier)
 	local plate = vehicleProps.plate
-	local state = state
-
-	for _,v in pairs(vehicules) do
-		if(plate == v.plate)then
-			local idveh = v.id
-			MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE id=@id",{['@state'] = state , ['@id'] = idveh})
-			break
-		end		
-	end
+	MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE plate=@plate",{['@state'] = state , ['@plate'] = plate})
 end)	
 --Fin change le state du véhicule
 
 RegisterServerEvent('eden_garage:ChangeStateFromFourriereMecano')
 AddEventHandler('eden_garage:ChangeStateFromFourriereMecano', function(vehicleProps, fourrieremecano)
 	local _source = source
-	local plate = vehicleProps.plate
+	local vehicleplate = vehicleProps.plate
 	local fourrieremecano = fourrieremecano
 	
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles",{}, function(result) 
-		for i=1, #result,1 do
-			local vehicle = json.decode(result[i].vehicle)
-			local vehicleplate = vehicle.plate
-			if (plate == vehicleplate) then				
-				local idveh = result[i].id
-				MySQL.Sync.execute("UPDATE owned_vehicles SET fourrieremecano =@fourrieremecano WHERE id=@id",{['@fourrieremecano'] = fourrieremecano , ['@id'] = idveh})
-				break
-			end
-		end
-	end)
+	MySQL.Sync.execute("UPDATE owned_vehicles SET fourrieremecano =@fourrieremecano WHERE plate=@plate",{['@fourrieremecano'] = fourrieremecano , ['@plate'] = vehicleplate})
 end)
 
 
 RegisterServerEvent('eden_garage:renamevehicle')
-AddEventHandler('eden_garage:renamevehicle', function(vehicleid, name)
-	MySQL.Sync.execute("UPDATE owned_vehicles SET vehiclename =@vehiclename WHERE id=@id",{['@vehiclename'] = name , ['@id'] = vehicleid})
+AddEventHandler('eden_garage:renamevehicle', function(vehicleplate, name)
+	MySQL.Sync.execute("UPDATE owned_vehicles SET vehiclename =@vehiclename WHERE plate=@plate",{['@vehiclename'] = name , ['@plate'] = vehicleplate})
 end)
 
 ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, KindOfVehicle)	
@@ -153,7 +111,7 @@ ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, Kin
 		identifier = xPlayer.getIdentifier()
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier AND state=false",{['@identifier'] = identifier}, function(data) 
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier AND state=false OR fourrieremecano=true",{['@identifier'] = identifier}, function(data) 
 		for _,v in pairs(data) do
 			local vehicle = json.decode(v.vehicle)
 			table.insert(vehicules, {vehicle =vehicle, fourrieremecano = v.fourrieremecano, vehiclename =  v.vehiclename})
@@ -188,65 +146,6 @@ AddEventHandler('eden_garage:pay', function()
 
 end)
 --Fin fonction qui retire argent
-
-
---Recupere les vehicules
-function getPlayerVehicles(identifier)
-	local vehicles = {}
-	local data = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = identifier})	
-	for _,v in pairs(data) do
-		local vehicle = json.decode(v.vehicle)
-		table.insert(vehicles, {id = v.id, plate = vehicle.plate})
-	end
-	return vehicles
-end
---Fin Recupere les vehicules
-
---Debug
-RegisterServerEvent('eden_garage:debug')
-AddEventHandler('eden_garage:debug', function(var)
-	print(to_string(var))
-end)
-
-function table_print (tt, indent, done)
-  done = done or {}
-  indent = indent or 0
-  if type(tt) == "table" then
-    local sb = {}
-    for key, value in pairs (tt) do
-      table.insert(sb, string.rep (" ", indent)) -- indent it
-      if type (value) == "table" and not done [value] then
-        done [value] = true
-        table.insert(sb, "{\n");
-        table.insert(sb, table_print (value, indent + 2, done))
-        table.insert(sb, string.rep (" ", indent)) -- indent it
-        table.insert(sb, "}\n");
-      elseif "number" == type(key) then
-        table.insert(sb, string.format("\"%s\"\n", tostring(value)))
-      else
-        table.insert(sb, string.format(
-            "%s = \"%s\"\n", tostring (key), tostring(value)))
-       end
-    end
-    return table.concat(sb)
-  else
-    return tt .. "\n"
-  end
-end
-
-function to_string( tbl )
-    if  "nil"       == type( tbl ) then
-        return tostring(nil)
-    elseif  "table" == type( tbl ) then
-        return table_print(tbl)
-    elseif  "string" == type( tbl ) then
-        return tbl
-    else
-        return tostring(tbl)
-    end
-end
---Fin Debug
-
 
 -- Fonction qui change les etats sorti en rentré lors d'un restart
 -- AddEventHandler('onMySQLReady', function()
