@@ -51,10 +51,10 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 		identifier = xPlayer.getIdentifier()
 	end
 	local vehplate = vehicleProps.plate
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate",{['@plate'] = vehplate}, function(result) 
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate and owner=@identifier",{['@plate'] = vehplate, ['@identifier'] = identifier}, function(result) 
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
-			MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate and owner=@identifier",{['@plate'] = vehplate, ['@identifier'] = identifier}, function(result) 
+			MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate",{['@plate'] = vehplate}, function(result) 
 			cb(true)
 		else
 			cb(false)
