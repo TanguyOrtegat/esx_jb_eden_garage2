@@ -21,7 +21,7 @@ function checkVersion()
           patchnote = patchnote..line.."\n"
         end
 
-        print("Une nouvelle version de esx_eden_garage2 est disponible: "..VERSION)
+        print("A new version of esx_eden_garage2 is available: "..VERSION)
         print("patchnote: \n"..patchnote)
         print("\n=================================\n")
       end
