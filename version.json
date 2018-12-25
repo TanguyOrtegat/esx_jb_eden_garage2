@@ -3,6 +3,7 @@
   "patchnote" : [
     "- fix little dupe bug for ppl in back of vehicle",
     "- code optimisation",
-    "- added description n ressource.lua",
+    "- added description in ressource.lua",
+    "- fix only you can enter vehicle in garage",
   ]
 }
