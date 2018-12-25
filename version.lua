@@ -25,8 +25,6 @@ function checkVersion()
         print("patchnote: \n"..patchnote)
         print("\n=================================\n")
       end
-    else
-      print(getText("cant_get_version"))
     end
   end, "GET")
 end
