@@ -11,13 +11,8 @@ local Keys = {
 	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
 }
 
-local CurrentAction = nil
 local GUI                       = {}
 GUI.Time                        = 0
-local HasAlreadyEnteredMarker   = false
-local LastZone                  = nil
-local CurrentActionMsg          = ''
-local CurrentActionData         = {}
 local PlayerData                = {}
 local carInstance 				= {}
 local GUI      					= {}
@@ -217,17 +212,12 @@ function ListVehiclesFourriereMenu(garage)
 			elements = elements,
 		},
 		function(data, menu)
-			-- if(data.current.value.state)then
-				menu.close()
-				SpawnVehicleMecano(data.current.value.vehicle, garage)
-				TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', data.current.value.vehicle, false)
-			-- else
-				-- TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
-			-- end
+			menu.close()
+			SpawnVehicleMecano(data.current.value.vehicle, garage)
+			TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', data.current.value.vehicle, false)
 		end,
 		function(data, menu)
 			menu.close()
-			--CurrentAction = 'open_garage_action'
 		end
 	)	
 	end)
@@ -254,13 +244,12 @@ function StockVehicleMenu(KindOfVehicle)
 							end
 						end
 						DeleteVehicle(TrailerHandle)
-						TriggerServerEvent('eden_garage:modifystate', trailerProps, true, KindOfVehicle)
+						TriggerServerEvent('eden_garage:modifystate', trailerplate, true)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
 				end,trailerProps, KindOfVehicle)
-				hasAlreadyEnteredMarker = false
 			else
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
@@ -271,7 +260,7 @@ function StockVehicleMenu(KindOfVehicle)
 							end
 						end
 						DeleteVehicle(vehicle)
-						TriggerServerEvent('eden_garage:modifystate', vehicleProps, true, KindOfVehicle)
+						TriggerServerEvent('eden_garage:modifystate', vehicleplate, true)
 						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
@@ -284,7 +273,6 @@ function StockVehicleMenu(KindOfVehicle)
 	else
 		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
 	end
-	CurrentAction = 'garage_delete'
 end
 -- Fin fonction qui permet de rentrer un vehicule 
 
@@ -293,36 +281,37 @@ function StockVehicleFourriereMenu()
 	local playerPed  = GetPlayerPed(-1)
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
-		local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
-		local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-		local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
-		if GotTrailer then
-			ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
-
-				if(valid) then
-					DeleteVehicle(TrailerHandle)
-					TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', trailerProps, true)
-					TriggerEvent('esx:showNotification', 'La remorque est rentré dans la fourrière')
-				else
-					TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker cette remorque dans la fourrière')
-				end
-			end,trailerProps)
-			hasAlreadyEnteredMarker = false
+		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
+			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
+			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
+			if GotTrailer then
+				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
+					if(valid) then
+						DeleteVehicle(TrailerHandle)
+						TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', trailerProps, true)
+						TriggerEvent('esx:showNotification', 'La remorque est rentré dans la fourrière')
+					else
+						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker cette remorque dans la fourrière')
+					end
+				end,trailerProps)
+			else
+				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
+					if(valid) then
+						DeleteVehicle(vehicle)
+						TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, true)
+						TriggerEvent('esx:showNotification', 'Le véhicule est rentré dans la fourrière')
+					else
+						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule dans la fourrière')
+					end
+				end,vehicleProps)
+			end
 		else
-			ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
-				if(valid) then
-					DeleteVehicle(vehicle)
-					TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, true)
-					TriggerEvent('esx:showNotification', 'Le véhicule est rentré dans la fourrière')
-				else
-					TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule dans la fourrière')
-				end
-			end,vehicleProps)
+			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
 		end
 	else
 		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
 	end
-	CurrentAction = 'garagemecano_delete'
 end
 -- Fin fonction qui permet de rentrer un vehicule dans fourriere
 --Fin fonction Menu
@@ -330,7 +319,6 @@ end
 
 --Fonction pour spawn vehicule
 function SpawnVehicle(vehicle, garage, KindOfVehicle)
--- if garage ~= nil then
 	ESX.Game.SpawnVehicle(vehicle.model, {
 		x = garage.SpawnPoint.Pos.x,
 		y = garage.SpawnPoint.Pos.y,
@@ -345,9 +333,7 @@ function SpawnVehicle(vehicle, garage, KindOfVehicle)
 				TriggerEvent('esx_jobs2:addplate', carplate)
 			end	
 		end)
-	TriggerServerEvent('eden_garage:modifystate', vehicle, false, KindOfVehicle)
--- end
-
+	TriggerServerEvent('eden_garage:modifystate', vehicle.plate, false)
 end
 --Fin fonction pour spawn vehicule
 
@@ -417,8 +403,6 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 				if not iscaronearth then
 					ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
 						if hasEnoughMoney then
-									
-							TriggerServerEvent('eden_garage:pay')
 							SpawnVehicle(data.current.value, garage, KindOfVehicle)
 						else
 							ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
@@ -431,9 +415,8 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 		end,
 		function(data, menu)
 			menu.close()
-			-- CurrentAction = 'garage_spawn'
 		end
-		)	
+		)
 	end, KindOfVehicle)
 end
 

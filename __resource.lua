@@ -1,3 +1,4 @@
+description 'Garage made by Jager Bom'
 dependency 'ft_libs'
 
 server_scripts {

@@ -1,8 +1,8 @@
 {
-  "version":"2.0.0",
+  "version":"2.0.1",
   "patchnote" : [
-    "- fix bug with mecano fourriere",
-    "- ADDED supporrt for plate as PK",
-    "- server code optimisation",
+    "- fix little dupe bug for ppl in back of vehicle",
+    "- code optimisation",
+    "- added description n ressource.lua",
   ]
 }

@@ -79,8 +79,7 @@ end)
 
 --Change le state du véhicule
 RegisterServerEvent('eden_garage:modifystate')
-AddEventHandler('eden_garage:modifystate', function(vehicleProps, state, KindOfVehicle)
-	local plate = vehicleProps.plate
+AddEventHandler('eden_garage:modifystate', function(plate, state)
 	MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE plate=@plate",{['@state'] = state , ['@plate'] = plate})
 end)	
 --Fin change le state du véhicule
@@ -122,30 +121,16 @@ end)
 
 --Foonction qui check l'argent
 ESX.RegisterServerCallback('eden_garage:checkMoney', function(source, cb)
-
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	if xPlayer.get('money') >= Config.Price then
+		xPlayer.removeMoney(Config.Price)
 		cb(true)
 	else
 		cb(false)
 	end
-
 end)
 --Fin Foonction qui check l'argent
-
---fonction qui retire argent
-RegisterServerEvent('eden_garage:pay')
-AddEventHandler('eden_garage:pay', function()
-
-	local xPlayer = ESX.GetPlayerFromId(source)
-
-	xPlayer.removeMoney(Config.Price)
-
-	TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' .. Config.Price)
-
-end)
---Fin fonction qui retire argent
 
 -- Fonction qui change les etats sorti en rentré lors d'un restart
 -- AddEventHandler('onMySQLReady', function()
