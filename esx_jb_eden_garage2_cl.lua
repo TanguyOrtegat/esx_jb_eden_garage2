@@ -284,8 +284,9 @@ function StockVehicleFourriereMenu()
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
 			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
+			
 			if GotTrailer then
+				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
 					if(valid) then
 						DeleteVehicle(TrailerHandle)
