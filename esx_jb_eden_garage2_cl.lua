@@ -35,7 +35,7 @@ RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
 	PlayerData.job = job
 	for k,v in pairs(Config.GaragesMecano) do
-		if ('police' == PlayerData.second_job.name or PlayerData.job.name == 'police') or ('mecano' == PlayerData.second_job.name or PlayerData.job.name == 'mecano') then
+		if ( PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
@@ -49,7 +49,7 @@ RegisterNetEvent('esx:setSecondJob')
 AddEventHandler('esx:setSecondJob', function(job)
 	PlayerData.second_job = job
 	for k,v in pairs(Config.GaragesMecano) do
-		if ('police' == PlayerData.second_job.name or PlayerData.job.name == 'police') or ('mecano' == PlayerData.second_job.name or PlayerData.job.name == 'mecano') then
+		if (PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
@@ -63,7 +63,7 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
     PlayerData = xPlayer
 	for k,v in pairs(Config.GaragesMecano) do
-		if ('police' == PlayerData.second_job.name or PlayerData.job.name == 'police') or ('mecano' == PlayerData.second_job.name or PlayerData.job.name == 'mecano') then
+		if (PlayerData.job.name == 'police') or ( PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
