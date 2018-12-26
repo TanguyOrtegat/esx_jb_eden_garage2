@@ -2,19 +2,11 @@
  Garage privé basé sur ESX	 Garage privé basé sur ESX
  
   
-  Requirement : 	 Requirement : 
+Requirement : 
  esx_vehicleshop	 fxserver-esx_vehicleshop
  ft_libs (https://github.com/FivemTools/ft_libs)	
  
-  
-  Le garage prends en compte uniquement les véhicules achetés dans le concessionaire et aussi les véhicules qui sont dehors ou non.	 Le garage prends en compte uniquement les véhicules achetés dans le concessionaire et aussi les véhicules qui sont dehors ou non.
- Lors d'un reboot tous les véhicules passe en rentré.
- 
-  
-  features:	 1) Il faut appliquer le SQL
- 2) Mettre la resource dans votre server.cfg
- 3) Modifier la config pour ajouter garage ou modifier
- 
+  features:	
   
  - renaming cars
  - an exited vehicle can not be out again	
