@@ -1,7 +1,8 @@
 {
-  "version":"2.0.3",
+  "version":"2.0.4",
   "patchnote" : [
-    "- fix where everyone saw cars that were in pound",
-    "- fix duplication possibility when getting out a vehicle",
+    "- fix bug with mecano fourriere",
+    "- ADDED supporrt for plate as PK",
+    "- forgot patch for plates"
   ]
 }

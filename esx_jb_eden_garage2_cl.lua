@@ -49,7 +49,7 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
     PlayerData = xPlayer
 	for k,v in pairs(Config.GaragesMecano) do
-		if ( PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
+		if (PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
@@ -95,6 +95,7 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 	ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicles)
 		if not table.empty(vehicles) then
 			for _,v in pairs(vehicles) do
+				v.vehicle = json.decode(v.vehicle)
 				local hashVehicule = v.vehicle.model		
 				if v.vehiclename == 'voiture' then
 					vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
@@ -182,7 +183,7 @@ function ListVehiclesFourriereMenu(garage)
 	ESX.TriggerServerCallback('eden_garage:getVehiclesMecano', function(vehicles)
 
 		for _,v in pairs(vehicles) do
-
+			v.vehicle = json.decode(v.vehicle)
 			local hashVehicule = v.vehicle.model
     		local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
 
@@ -219,8 +220,8 @@ function StockVehicleMenu(KindOfVehicle)
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
 			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 			if GotTrailer then
+				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
 						local trailerplate = GetVehicleNumberPlateText(TrailerHandle)
@@ -343,6 +344,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 		local elements = {}
 		if not table.empty(vehicles) then
 			for _,v in pairs(vehicles) do
+				v.vehicle = json.decode(v.vehicle)
 				local hashVehicule = v.vehicle.model
 				local vehicleName
 				local labelvehicle		
