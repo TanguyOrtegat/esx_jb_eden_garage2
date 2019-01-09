@@ -1,9 +1,7 @@
 {
-  "version":"2.0.2",
+  "version":"2.0.3",
   "patchnote" : [
-    "- fix little dupe bug for ppl in back of vehicle",
-    "- code optimisation",
-    "- added description in ressource.lua",
-    "- fix only you can enter vehicle in garage",
+    "- fix where everyone saw cars that were in pound",
+    "- fix duplication possibility when getting out a vehicle",
   ]
 }

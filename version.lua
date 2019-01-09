@@ -1,5 +1,5 @@
 --[[ Version Checker ]]--
-local VERSION = "2.0.2"
+local VERSION = "2.0.3"
 
 AddEventHandler("onResourceStart", function(resource)
     if resource == GetCurrentResourceName() then
@@ -21,10 +21,12 @@ function checkVersion()
           patchnote = patchnote..line.."\n"
         end
 
-        print("A new version of esx_eden_garage2 is available: "..VERSION)
+        print("Une nouvelle version de esx_eden_garage2 est disponible: "..VERSION)
         print("patchnote: \n"..patchnote)
         print("\n=================================\n")
       end
+    else
+      print(getText("cant_get_version"))
     end
   end, "GET")
 end

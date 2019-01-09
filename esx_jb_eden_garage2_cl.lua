@@ -35,7 +35,7 @@ RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
 	PlayerData.job = job
 	for k,v in pairs(Config.GaragesMecano) do
-		if ( PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
+		if ('police' == PlayerData.second_job.name or PlayerData.job.name == 'police') or ('mecano' == PlayerData.second_job.name or PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
@@ -49,7 +49,7 @@ RegisterNetEvent('esx:setSecondJob')
 AddEventHandler('esx:setSecondJob', function(job)
 	PlayerData.second_job = job
 	for k,v in pairs(Config.GaragesMecano) do
-		if (PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
+		if ('police' == PlayerData.second_job.name or PlayerData.job.name == 'police') or ('mecano' == PlayerData.second_job.name or PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
@@ -63,7 +63,7 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
     PlayerData = xPlayer
 	for k,v in pairs(Config.GaragesMecano) do
-		if (PlayerData.job.name == 'police') or ( PlayerData.job.name == 'mecano') then
+		if ('police' == PlayerData.second_job.name or PlayerData.job.name == 'police') or ('mecano' == PlayerData.second_job.name or PlayerData.job.name == 'mecano') then
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
 			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
 		else
@@ -284,9 +284,8 @@ function StockVehicleFourriereMenu()
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
 			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-			
+			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 			if GotTrailer then
-				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
 					if(valid) then
 						DeleteVehicle(TrailerHandle)
@@ -404,6 +403,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 				if not iscaronearth then
 					ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
 						if hasEnoughMoney then
+							menu.close()
 							SpawnVehicle(data.current.value, garage, KindOfVehicle)
 						else
 							ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
