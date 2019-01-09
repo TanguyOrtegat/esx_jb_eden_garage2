@@ -20,9 +20,9 @@
 
 
  ```	
-  ALTER TABLE `owned_vehicles` ADD INDEX `vehsowned` (`owner`);		Fonctionnement :
- ALTER TABLE `owned_vehicles` ADD `fourrieremecano` BOOLEAN NOT NULL DEFAULT FALSE;		Le cercle jaune pour sortir / rentrer vehicule / recuperer vehicule ( en cas de depop de celui ci )
- ALTER TABLE `owned_vehicles` ADD `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture';	      	Pour rntrer un vehicule, le mettre dans le rond rouge puis aller dans le rond jaune et faire rentrer vehicule
+  ALTER TABLE `owned_vehicles` ADD INDEX `vehsowned` (`owner`);
+ ALTER TABLE `owned_vehicles` ADD `fourrieremecano` BOOLEAN NOT NULL DEFAULT FALSE;
+ ALTER TABLE `owned_vehicles` ADD `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture';
  ```		
 
 
