@@ -3,6 +3,7 @@
   "patchnote" : [
     "- fix bug with mecano fourriere",
     "- ADDED supporrt for plate as PK",
-    "- forgot patch for plates"
+    "- forgot patch for plates",
+    "- decoding json client sided for optimisation"
   ]
 }
