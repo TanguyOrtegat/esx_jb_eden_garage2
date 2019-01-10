@@ -31,33 +31,6 @@ Citizen.CreateThread(function()
 	end
 end)
 -- Fin init ESX
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-	PlayerData.job = job
-	for k,v in pairs(Config.GaragesMecano) do
-		if (PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
-			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
-			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
-		else
-			exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
-			exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
-		end
-	end
-end)
-
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-    PlayerData = xPlayer
-	for k,v in pairs(Config.GaragesMecano) do
-		if (PlayerData.job.name == 'police') or (PlayerData.job.name == 'mecano') then
-			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
-			exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
-		else
-			exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_mecanodeletepoint")
-			exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_mecanospawnpoint")
-		end
-	end
-end)
 
 --Fonction Menu
 
