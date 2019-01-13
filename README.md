@@ -4,8 +4,7 @@
 
 
  Requirement :  
- esx_vehicleshop		fxserver-esx_vehicleshop
- ft_libs (https://github.com/FivemTools/ft_libs)		
+ esx_vehicleshop		or fxserver-esx_vehicleshop / ft_libs (https://github.com/FivemTools/ft_libs)		
 
   features:	
 
@@ -26,10 +25,6 @@
  ALTER TABLE `owned_vehicles` ADD `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture';
  ```		
 
-
-  Fonctionnement :	
- Le cercle jaune pour sortir / rentrer vehicule / recuperer vehicule ( en cas de depop de celui ci )	
- Pour rntrer un vehicule, le mettre dans le rond rouge puis aller dans le rond jaune et faire rentrer vehicule	
 
  if you want the impound of police and mecano to work, paste those lines when you take your duty:		
 
