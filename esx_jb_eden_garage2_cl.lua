@@ -345,11 +345,8 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 				ESX.ShowNotification("Va voir la police ou mecano pour savoir comment recuperer ton véhicule.")
 			elseif data.current.value ~= nil then
 				local iscaronearth = false
-				print(dump(carInstance))
 				for k,v in pairs (carInstance) do
 					if v.plate == data.current.value.plate then
-						print('isonworld?')
-						print(DoesEntityExist(v.vehicleentity))
 						if DoesEntityExist(v.vehicleentity) then
 							iscaronearth = true
 						else
