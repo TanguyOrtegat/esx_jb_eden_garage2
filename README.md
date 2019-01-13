@@ -1,4 +1,4 @@
-# esx_eden_garage
+# esx_jb_eden_garage
  Garage privé basé sur ESX	
 
 
