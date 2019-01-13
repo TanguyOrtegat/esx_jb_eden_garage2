@@ -197,7 +197,6 @@ function StockVehicleMenu(KindOfVehicle)
 								table.remove(carInstance, k)
 							end
 						end
-						local model = GetEntityModel(TrailerHandle)
 						DeleteVehicle(TrailerHandle)
 						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
