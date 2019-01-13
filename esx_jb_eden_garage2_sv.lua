@@ -6,13 +6,12 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindOfVehicle)
 	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = {}
 	local identifier = ""
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = xPlayer.getIdentifier()
+		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = identifier}, function(data) 
@@ -42,18 +41,25 @@ end)
 ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps, KindOfVehicle)
 	local identifier = ""
 	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = xPlayer.getIdentifier()
+		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 	local vehplate = vehicleProps.plate:match("^%s*(.-)%s*$")
+	local vehiclemodel = vehicleProps.model
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate and owner=@identifier",{['@plate'] = vehplate, ['@identifier'] = identifier}, function(result)  
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
-			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE plate=@plate",{['@vehprop'] = vehprop, ['@plate'] = vehplate})
-			cb(true)
+			local originalvehprops = json.decode(result[1].vehicle)
+			if originalvehprops.model == vehiclemodel then
+				MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE plate=@plate",{['@vehprop'] = vehprop, ['@plate'] = vehplate})
+				cb(true)
+			else
+				DropPlayer(_source, "Tu es kick du serveur, voilà ce qu'il se passe quand on essaye de cheater.")
+				print("[esx_eden_garage] player "..identifier..' tried to spawn a vehicle with hash:'..vehiclemodel..". his original vehicle: "..originalvehprops.model)
+				cb(false)
+			end
 		else
 			cb(false)
 		end
@@ -62,13 +68,22 @@ end)
 --Fin stock les vehicules
 
 ESX.RegisterServerCallback('eden_garage:stockvmecano',function(source,cb, vehicleProps)
+	local _source = source
 	local plate = vehicleProps.plate:match("^%s*(.-)%s*$")
-	
+	local vehiclemodel = vehicleProps.model
+	local identifier = GetPlayerIdentifiers(_source)[1]
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate",{['@plate'] = plate}, function(result) 
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
-			MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE plate=@plate",{['@vehprop'] = vehprop, ['@plate'] = plate})
-			cb(true)
+			local originalvehprops = json.decode(result[1].vehicle)
+			if originalvehprops.model == vehiclemodel then
+				MySQL.Sync.execute("UPDATE owned_vehicles SET vehicle =@vehprop WHERE plate=@plate",{['@vehprop'] = vehprop, ['@plate'] = plate})
+				cb(true)
+			else
+				DropPlayer(_source, "Tu es kick du serveur, voilà ce qu'il se passe quand on essaye de cheater.")
+				print("[esx_eden_garage] player "..identifier..' tried to spawn a vehicle with hash:'..vehiclemodel..". his original vehicle: "..originalvehprops.model)
+				cb(false)
+			end
 		else
 			cb(false)
 		end
@@ -99,13 +114,12 @@ end)
 
 ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, KindOfVehicle)	
 	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = {}
 	local identifier = ""
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = xPlayer.getIdentifier()
+		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier AND (state=false OR fourrieremecano=true)",{['@identifier'] = identifier}, function(data) 

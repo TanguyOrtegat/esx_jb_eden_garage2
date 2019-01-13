@@ -13,10 +13,7 @@ local Keys = {
 
 local GUI                       = {}
 GUI.Time                        = 0
-local PlayerData                = {}
 local carInstance 				= {}
-local GUI      					= {}
-GUI.Time       					= 0
 
 -- Fin Local
 
@@ -30,7 +27,6 @@ Citizen.CreateThread(function()
 		end)
 	end
 end)
--- Fin init ESX
 
 --Fonction Menu
 
@@ -191,36 +187,35 @@ function StockVehicleMenu(KindOfVehicle)
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
-			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
 			if GotTrailer then
 				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
-						local trailerplate = GetVehicleNumberPlateText(TrailerHandle)
 						for k,v in pairs (carInstance) do
 							if v.plate == trailerplate then
 								table.remove(carInstance, k)
 							end
 						end
+						local model = GetEntityModel(TrailerHandle)
 						DeleteVehicle(TrailerHandle)
-						TriggerServerEvent('eden_garage:modifystate', trailerplate, true)
+						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
 				end,trailerProps, KindOfVehicle)
 			else
+				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
-						local vehicleplate = GetVehicleNumberPlateText(vehicle)
 						for k,v in pairs (carInstance) do
 							if v.plate == vehicleplate then
 								table.remove(carInstance, k)
 							end
 						end
 						DeleteVehicle(vehicle)
-						TriggerServerEvent('eden_garage:modifystate', vehicleplate, true)
+						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
@@ -242,10 +237,9 @@ function StockVehicleFourriereMenu()
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
-			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
-			local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 			if GotTrailer then
+				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
 				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
 					if(valid) then
 						DeleteVehicle(TrailerHandle)
@@ -256,6 +250,7 @@ function StockVehicleFourriereMenu()
 					end
 				end,trailerProps)
 			else
+				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
 					if(valid) then
 						DeleteVehicle(vehicle)
@@ -351,8 +346,11 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 				ESX.ShowNotification("Va voir la police ou mecano pour savoir comment recuperer ton véhicule.")
 			elseif data.current.value ~= nil then
 				local iscaronearth = false
+				print(dump(carInstance))
 				for k,v in pairs (carInstance) do
 					if v.plate == data.current.value.plate then
+						print('isonworld?')
+						print(DoesEntityExist(v.vehicleentity))
 						if DoesEntityExist(v.vehicleentity) then
 							iscaronearth = true
 						else

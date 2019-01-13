@@ -1,9 +1,7 @@
 {
-  "version":"2.0.4",
+  "version":"2.0.5",
   "patchnote" : [
-    "- fix bug with mecano fourriere",
-    "- ADDED supporrt for plate as PK",
-    "- forgot patch for plates",
-    "- decoding json client sided for optimisation"
+    "- fix important cheat bug with cheat engine",
+    "- code opti"
   ]
 }
