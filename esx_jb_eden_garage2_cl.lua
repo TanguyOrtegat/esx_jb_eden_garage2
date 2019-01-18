@@ -197,7 +197,7 @@ function StockVehicleMenu(KindOfVehicle)
 								table.remove(carInstance, k)
 							end
 						end
-						DeleteVehicle(TrailerHandle)
+						DeleteEntity(TrailerHandle)
 						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
 					else
@@ -213,7 +213,7 @@ function StockVehicleMenu(KindOfVehicle)
 								table.remove(carInstance, k)
 							end
 						end
-						DeleteVehicle(vehicle)
+						DeleteEntity(vehicle)
 						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 					else
