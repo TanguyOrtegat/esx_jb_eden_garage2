@@ -1,7 +1,8 @@
 {
-  "version":"2.0.5",
+  "version":"2.0.6",
   "patchnote" : [
     "- fix important cheat bug with cheat engine",
-    "- code opti"
+    "- code opti",
+    "- replaced DeleteVehicle to DeleteEntity"
   ]
 }
