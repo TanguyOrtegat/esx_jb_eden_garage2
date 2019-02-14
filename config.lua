@@ -284,26 +284,26 @@ Config.Garages = {
 			Functionmenu = StockVehicleMenu,
 		}, 	
 	},	
-	-- Garage_Tournoi = {	
-		-- Pos = {x = 3171.8381347656,y = -1667.3009033203,z = 6.4746117591858 },
-		-- Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
-		-- Name = 'Garage',
-		-- HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage",
-		-- Functionmenu = OpenMenuGarage,
-		-- SpawnPoint = {
-			-- Pos = {x = 3164.1762695313,y = -1667.0953369141,z = 6.4746117591858 },
-			-- Heading = 264.63,
-			-- Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
-			-- HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre véhicule",
-			-- Functionmenu = ListVehiclesMenu,
-		-- },
-		-- DeletePoint = {
-			-- Pos = {x = 3158.0983886719,y = -1661.5126953125,z = 7.0836601257324 },
-			-- Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
-			-- HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
-			-- Functionmenu = StockVehicleMenu,
-		-- }, 	
-	-- },		
+	--[[ Garage_Tournoi = {	
+		Pos = {x = 3171.8381347656,y = -1667.3009033203,z = 6.4746117591858 },
+		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
+		Name = 'Garage',
+		HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage",
+		Functionmenu = OpenMenuGarage,
+		SpawnPoint = {
+			Pos = {x = 3164.1762695313,y = -1667.0953369141,z = 6.4746117591858 },
+			Heading = 264.63,
+			Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre véhicule",
+			Functionmenu = ListVehiclesMenu,
+		},
+		DeletePoint = {
+			Pos = {x = 3158.0983886719,y = -1661.5126953125,z = 7.0836601257324 },
+			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
+			Functionmenu = StockVehicleMenu,
+		}, 	
+	},]]		
 }
 
 Config.GaragesMecano = {
@@ -339,19 +339,19 @@ Config.GaragesMecano = {
 			Functionmenu = StockVehicleFourriereMenu,
 		}, 	
 	},	
-	-- Bennys2 = {
-		-- Marker = 1,
-		-- SpawnPoint = {
-			-- Pos = {x=-190.455, y= -1290.654, z= 30.295},
-			-- Color = {r=0,g=255,b=0},
-			-- Size  = {x = 3.0, y = 3.0, z = 1.0},
-			-- Marker = 1
-		-- },
-		-- DeletePoint = {
-			-- Pos = {x=-190.379, y=-1284.667, z=30.233},
-			-- Color = {r=255,g=0,b=0},
-			-- Size  = {x = 3.0, y = 3.0, z = 1.0},
-			-- Marker = 1
-		-- }, 	
-	-- },
+	--[[ Bennys2 = {
+		Marker = 1,
+		SpawnPoint = {
+			Pos = {x=-190.455, y= -1290.654, z= 30.295},
+			Color = {r=0,g=255,b=0},
+			Size  = {x = 3.0, y = 3.0, z = 1.0},
+			Marker = 1
+		},
+		DeletePoint = {
+			Pos = {x=-190.379, y=-1284.667, z=30.233},
+			Color = {r=255,g=0,b=0},
+			Size  = {x = 3.0, y = 3.0, z = 1.0},
+			Marker = 1
+		}, 	
+	},]]
 }
