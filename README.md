@@ -48,6 +48,9 @@ exports.ft_libs:DisableArea("esx_eden_garage_area_Bennys_mecanospawnpoint")
  if you haven't plate column:	
 ```	
 ALTER TABLE owned_vehicle add plate varchar(50) NOT NULL;	
+ALTER TABLE `owned_vehicles` ADD INDEX `vehsowned` (`owner`);
+ALTER TABLE `owned_vehicles` ADD `fourrieremecano` BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE `owned_vehicles` ADD `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture';
 ```	
 and run this script once:	
 https://github.com/TanguyOrtegat/esx_jb_migrate	
