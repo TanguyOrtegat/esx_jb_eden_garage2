@@ -26,7 +26,7 @@ function checkVersion()
         print("\n=================================\n")
       end
     else
-      print(getText("cant_get_version"))
+      print("cant_get_version")
     end
   end, "GET")
 end
