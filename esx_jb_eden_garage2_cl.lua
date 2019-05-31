@@ -193,7 +193,7 @@ function StockVehicleMenu(KindOfVehicle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
 						for k,v in pairs (carInstance) do
-							if v.plate == trailerplate then
+							if ESX.Math.Trim(v.plate) == ESX.Math.Trim(trailerplate) then
 								table.remove(carInstance, k)
 							end
 						end
@@ -209,7 +209,7 @@ function StockVehicleMenu(KindOfVehicle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
 						for k,v in pairs (carInstance) do
-							if v.plate == vehicleplate then
+							if ESX.Math.Trim(v.plate) == ESX.Math.Trim(vehicleplate) then
 								table.remove(carInstance, k)
 							end
 						end
@@ -346,7 +346,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 			elseif data.current.value ~= nil then
 				local iscaronearth = false
 				for k,v in pairs (carInstance) do
-					if v.plate == data.current.value.plate then
+					if ESX.Math.Trim(v.plate) == ESX.Math.Trim(data.current.value.plate) then
 						if DoesEntityExist(v.vehicleentity) then
 							iscaronearth = true
 						else
