@@ -1,8 +1,6 @@
 {
-  "version":"2.0.6",
+  "version":"2.0.7",
   "patchnote" : [
-    "- fix important cheat bug with cheat engine",
-    "- code opti",
-    "- replaced DeleteVehicle to DeleteEntity"
+    "- fix dupe glich for plates with spaces"
   ]
 }
