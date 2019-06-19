@@ -128,7 +128,7 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 						end
 						if (GetOnscreenKeyboardResult()) then
 							local name = GetOnscreenKeyboardResult()
-							TriggerServerEvent('eden_garage:renamevehicle', ESX.Math.Trim(data.current.value.plate), name)
+							TriggerServerEvent('eden_garage:renamevehicle', data.current.value.plate, name)
 						end
 					end
 				end,
@@ -198,7 +198,7 @@ function StockVehicleMenu(KindOfVehicle)
 							end
 						end
 						DeleteEntity(TrailerHandle)
-						TriggerServerEvent('eden_garage:modifystate', ESX.Math.Trim(trailerProps.plate), true)
+						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
@@ -214,7 +214,7 @@ function StockVehicleMenu(KindOfVehicle)
 							end
 						end
 						DeleteEntity(vehicle)
-						TriggerServerEvent('eden_garage:modifystate', ESX.Math.Trim(vehicleProps.plate), true)
+						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
 						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
@@ -280,14 +280,14 @@ function SpawnVehicle(vehicle, garage, KindOfVehicle)
 		},garage.SpawnPoint.Heading, function(callback_vehicle)
 			ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
 			TaskWarpPedIntoVehicle(GetPlayerPed(-1), callback_vehicle, -1)
-			local carplate = ESX.Math.Trim(GetVehicleNumberPlateText(callback_vehicle))
+			local carplate = GetVehicleNumberPlateText(callback_vehicle)
 			table.insert(carInstance, {vehicleentity = callback_vehicle, plate = carplate})
 			if KindOfVehicle == 'brewer' or KindOfVehicle == 'joaillerie' or KindOfVehicle == 'fermier' or KindOfVehicle == 'fisherman' or KindOfVehicle == 'fuel' or KindOfVehicle == 'johnson' or KindOfVehicle == 'miner' or KindOfVehicle == 'reporter' or KindOfVehicle == 'vignerons' or KindOfVehicle == 'tabac' then
 				TriggerEvent('esx_jobs1:addplate', carplate)
 				TriggerEvent('esx_jobs2:addplate', carplate)
 			end	
 		end)
-	TriggerServerEvent('eden_garage:modifystate', ESX.Math.Trim(vehicle.plate), false)
+	TriggerServerEvent('eden_garage:modifystate', vehicle.plate, false)
 end
 --Fin fonction pour spawn vehicule
 
@@ -397,7 +397,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 then
+						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
 							v.Functionmenu(v, "personal")
 							GUI.Time = GetGameTimer()
 						end
@@ -429,7 +429,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.SpawnPoint.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 then
+						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
 							v.SpawnPoint.Functionmenu(v, "personal")
 							GUI.Time = GetGameTimer()
 						end
@@ -495,7 +495,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.SpawnPoint.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 then
+						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
 							v.SpawnPoint.Functionmenu(v)
 							GUI.Time = GetGameTimer()
 						end
@@ -591,12 +591,16 @@ end
 
 RegisterNetEvent('esx_eden_garage:ListVehiclesMenu')
 AddEventHandler('esx_eden_garage:ListVehiclesMenu', function(garage, society)
-	ListVehiclesMenu(garage, society)
+	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+		ListVehiclesMenu(garage, society)
+	end
 end)
 
 RegisterNetEvent('esx_eden_garage:OpenMenuGarage')
 AddEventHandler('esx_eden_garage:OpenMenuGarage', function(garage, society)
-	OpenMenuGarage(garage, society)
+	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+		OpenMenuGarage(garage, society)
+	end
 end)
 
 RegisterNetEvent('esx_eden_garage:StockVehicleMenu')
