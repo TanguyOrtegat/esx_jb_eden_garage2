@@ -3,8 +3,10 @@ Config.Blip			= {sprite= 290, color = 30}
 Config.MecanoBlip	= {sprite= 290, color = 20}
 Config.Price		= 500
 
+Config.StoreOnServerStart = false -- Store all vehicles in garage on server start?
+
 Config.Garages = {
-	Garage_Centre = {	
+	Garage_Centre = {
 		Pos = {x=215.800, y=-810.057, z=30.727},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -22,9 +24,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
+		},
 	},
-	Garage_Centre2 = {	
+	Garage_Centre2 = {
 		Pos = {x = -1523.191,y = -451.017,z = 35.596},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -42,9 +44,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},		
-	Garage_Paleto = {	
+		},
+	},
+	Garage_Paleto = {
 		Pos = {x=105.359, y=6613.586, z=32.3973},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -62,9 +64,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
+		},
 	},
-	Garage_SandyShore = {	
+	Garage_SandyShore = {
 		Pos = {x=1694.571, y=3610.924, z=35.319},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -82,9 +84,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
+		},
 	},
-	Garage_Ocean1 = {	
+	Garage_Ocean1 = {
 		Pos = {x = -3140.323,y = 1124.463,z = 20.706},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -102,9 +104,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},	
-	Garage_Ocean2 = {	
+		},
+	},
+	Garage_Ocean2 = {
 		Pos = {x = -2982.561,y = 327.506,z = 14.935},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -122,9 +124,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},		
-	Garage_Sud = {	
+		},
+	},
+	Garage_Sud = {
 		Pos = {x = 443.6696,y = -1969.4372,z = 24.401},
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -142,9 +144,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
+		},
 	},
-	Garage_Lake = {	
+	Garage_Lake = {
 		Pos = {x = -73.165504455566,y = 908.08734130859,z = 235.62712097168 },
 		Marker = { w= 1.0, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -162,9 +164,9 @@ Config.Garages = {
 			Marker = { w= 1.0, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},	
-	Garage_Occaz = {	
+		},
+	},
+	Garage_Occaz = {
 		Pos = {x = 472.00717163086,y = -1113.5531005859,z = 29.198709487915 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -182,9 +184,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
+		},
 	},
-	Garage_Groove = {	
+	Garage_Groove = {
 		Pos = {x = -69.514305114746,y = -1822.9477539063,z = 26.941974639893 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -202,9 +204,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
+		},
 	},
-	Garage_venise = {	
+	Garage_venise = {
 		Pos = {x = -1081.974609375,y = -1254.1881103516,z = 5.4244246482849 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -222,9 +224,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},	
-	Garage_tequila = {	
+		},
+	},
+	Garage_tequila = {
 		Pos = {x = -570.92272949219,y = 313.41049194336,z = 84.493560791016 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -242,9 +244,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},	
-	Garage_banque = {	
+		},
+	},
+	Garage_banque = {
 		Pos = {x = 363.48370361328,y = 296.83682250977,z = 103.50011444092 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -262,9 +264,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},	
-	Garage_mirrorpark = {	
+		},
+	},
+	Garage_mirrorpark = {
 		Pos = {x = 1033.9229736328,y = -767.10662841797,z = 58.003326416016 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -282,9 +284,9 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},	
-	--[[ Garage_Tournoi = {	
+		},
+	},
+	--[[ Garage_Tournoi = {
 		Pos = {x = 3171.8381347656,y = -1667.3009033203,z = 6.4746117591858 },
 		Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
@@ -302,8 +304,8 @@ Config.Garages = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 			Functionmenu = StockVehicleMenu,
-		}, 	
-	},]]		
+		},
+	},]]
 }
 
 Config.GaragesMecano = {
@@ -321,8 +323,8 @@ Config.GaragesMecano = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer le véhicule en fourrière",
 			Functionmenu = StockVehicleFourriereMenu,
-		}, 	
-	},		
+		},
+	},
 	police = {
 		Name = 'Fourriere Externe',
 		SpawnPoint = {
@@ -337,8 +339,8 @@ Config.GaragesMecano = {
 			Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer le véhicule en fourrière",
 			Functionmenu = StockVehicleFourriereMenu,
-		}, 	
-	},	
+		},
+	},
 	--[[ Bennys2 = {
 		Marker = 1,
 		SpawnPoint = {
@@ -352,6 +354,6 @@ Config.GaragesMecano = {
 			Color = {r=255,g=0,b=0},
 			Size  = {x = 3.0, y = 3.0, z = 1.0},
 			Marker = 1
-		}, 	
+		},
 	},]]
 }

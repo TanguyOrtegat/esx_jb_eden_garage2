@@ -1,19 +1,4 @@
--- Local
-local Keys = {
-	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57, 
-	["~"] = 243, ["1"] = 157, ["2"] = 158, ["3"] = 160, ["4"] = 164, ["5"] = 165, ["6"] = 159, ["7"] = 161, ["8"] = 162, ["9"] = 163, ["-"] = 84, ["="] = 83, ["BACKSPACE"] = 177, 
-	["TAB"] = 37, ["Q"] = 44, ["W"] = 32, ["E"] = 38, ["R"] = 45, ["T"] = 245, ["Y"] = 246, ["U"] = 303, ["P"] = 199, ["["] = 39, ["]"] = 40, ["ENTER"] = 18,
-	["CAPS"] = 137, ["A"] = 34, ["S"] = 8, ["D"] = 9, ["F"] = 23, ["G"] = 47, ["H"] = 74, ["K"] = 311, ["L"] = 182,
-	["LEFTSHIFT"] = 21, ["Z"] = 20, ["X"] = 73, ["C"] = 26, ["V"] = 0, ["B"] = 29, ["N"] = 249, ["M"] = 244, [","] = 82, ["."] = 81,
-	["LEFTCTRL"] = 36, ["LEFTALT"] = 19, ["SPACE"] = 22, ["RIGHTCTRL"] = 70, 
-	["HOME"] = 213, ["PAGEUP"] = 10, ["PAGEDOWN"] = 11, ["DELETE"] = 178,
-	["LEFT"] = 174, ["RIGHT"] = 175, ["TOP"] = 27, ["DOWN"] = 173,
-	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
-}
-
-local GUI                       = {}
-GUI.Time                        = 0
-local carInstance 				= {}
+local carInstance = {}
 
 -- Fin Local
 
@@ -22,8 +7,8 @@ ESX = nil
 
 Citizen.CreateThread(function()
 	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) 
-		ESX = obj 
+		TriggerEvent('esx:getSharedObject', function(obj)
+		ESX = obj
 		end)
 	end
 end)
@@ -55,7 +40,7 @@ function OpenMenuGarage(garage, KindOfVehicle)
 		function(data, menu)
 			menu.close()
 		end
-	)	
+	)
 end
 -- Afficher les listes des vehicules
 function ListVehiclesMenu(garage, KindOfVehicle)
@@ -65,7 +50,7 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 		if not table.empty(vehicles) then
 			for _,v in pairs(vehicles) do
 				v.vehicle = json.decode(v.vehicle)
-				local hashVehicule = v.vehicle.model		
+				local hashVehicule = v.vehicle.model
 				if v.vehiclename == 'voiture' then
 					vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
 				else
@@ -78,9 +63,9 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 					labelvehicle = vehicleName..': Rentré'
 				else
 					labelvehicle = vehicleName..': Sortie'
-				end	
+				end
 				table.insert(elements, {label =labelvehicle , value = v})
-				
+
 			end
 		else
 			table.insert(elements, {label ="Pas de voitures dans le garage" , value = nil})
@@ -110,15 +95,15 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 				},
 				function(data2, menu2)
 					if data2.current.value == "get_vehicle_out" then
-                        if (data.current.value.fourrieremecano) then
-                            TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
-                        elseif (data.current.value.state) then
-                            menu.close()
-                            menu2.close()
-                            SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
-                        else
-                            TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
-                        end
+						if (data.current.value.fourrieremecano) then
+							TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
+						elseif (data.current.value.state) then
+							menu.close()
+							menu2.close()
+							SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
+						else
+							TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
+						end
 					elseif data2.current.value == "rename_vehicle" then
 						AddTextEntry('FMMC_KEY_TIP8', "Nom du véhicule souhaité")
 						DisplayOnscreenKeyboard(false, "FMMC_KEY_TIP8", "", "", "", "", "", 64)
@@ -154,10 +139,10 @@ function ListVehiclesFourriereMenu(garage)
 		for _,v in pairs(vehicles) do
 			v.vehicle = json.decode(v.vehicle)
 			local hashVehicule = v.vehicle.model
-    		local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
+			local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
 
 			table.insert(elements, {label =vehicleName.." | "..v.firstname.." "..v.lastname , value = v})
-			
+
 		end
 
 		ESX.UI.Menu.Open(
@@ -175,7 +160,7 @@ function ListVehiclesFourriereMenu(garage)
 		function(data, menu)
 			menu.close()
 		end
-	)	
+	)
 	end)
 end
 -- Fin Afficher les listes des vehicules de fourriere
@@ -183,7 +168,7 @@ end
 
 -- Fonction qui permet de rentrer un vehicule
 function StockVehicleMenu(KindOfVehicle)
-	local playerPed  = GetPlayerPed(-1)
+	local playerPed  = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
@@ -228,11 +213,11 @@ function StockVehicleMenu(KindOfVehicle)
 		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
 	end
 end
--- Fin fonction qui permet de rentrer un vehicule 
+-- Fin fonction qui permet de rentrer un vehicule
 
 -- Fonction qui permet de rentrer un vehicule dans fourriere
 function StockVehicleFourriereMenu()
-	local playerPed  = GetPlayerPed(-1)
+	local playerPed  = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
@@ -276,16 +261,16 @@ function SpawnVehicle(vehicle, garage, KindOfVehicle)
 	ESX.Game.SpawnVehicle(vehicle.model, {
 		x = garage.SpawnPoint.Pos.x,
 		y = garage.SpawnPoint.Pos.y,
-		z = garage.SpawnPoint.Pos.z + 1											
+		z = garage.SpawnPoint.Pos.z + 1
 		},garage.SpawnPoint.Heading, function(callback_vehicle)
 			ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
-			TaskWarpPedIntoVehicle(GetPlayerPed(-1), callback_vehicle, -1)
+			TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
 			local carplate = GetVehicleNumberPlateText(callback_vehicle)
 			table.insert(carInstance, {vehicleentity = callback_vehicle, plate = carplate})
 			if KindOfVehicle == 'brewer' or KindOfVehicle == 'joaillerie' or KindOfVehicle == 'fermier' or KindOfVehicle == 'fisherman' or KindOfVehicle == 'fuel' or KindOfVehicle == 'johnson' or KindOfVehicle == 'miner' or KindOfVehicle == 'reporter' or KindOfVehicle == 'vignerons' or KindOfVehicle == 'tabac' then
 				TriggerEvent('esx_jobs1:addplate', carplate)
 				TriggerEvent('esx_jobs2:addplate', carplate)
-			end	
+			end
 		end)
 	TriggerServerEvent('eden_garage:modifystate', vehicle.plate, false)
 end
@@ -296,10 +281,10 @@ function SpawnVehicleMecano(vehicle, garage)
 	ESX.Game.SpawnVehicle(vehicle.model, {
 		x = garage.SpawnPoint.Pos.x,
 		y = garage.SpawnPoint.Pos.y,
-		z = garage.SpawnPoint.Pos.z + 1											
+		z = garage.SpawnPoint.Pos.z + 1
 		},garage.SpawnPoint.Heading, function(callback_vehicle)
 			ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
-			TaskWarpPedIntoVehicle(GetPlayerPed(-1), callback_vehicle, -1)
+			TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
 		end)
 	TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicle, false)
 end
@@ -314,13 +299,13 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 				v.vehicle = json.decode(v.vehicle)
 				local hashVehicule = v.vehicle.model
 				local vehicleName
-				local labelvehicle		
+				local labelvehicle
 				if v.vehiclename == 'voiture' then
 					vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
 				else
 					vehicleName = v.vehiclename
 				end
-				
+
 				if v.fourrieremecano then
 					labelvehicle = vehicleName..': Fourrière externe'
 					table.insert(elements, {label =labelvehicle , value = 'fourrieremecano'})
@@ -361,12 +346,12 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 							menu.close()
 							SpawnVehicle(data.current.value, garage, KindOfVehicle)
 						else
-							ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
+							ESX.ShowNotification('Vous n\'avez pas assez d\'argent')
 						end
 					end)
 				else
 					ESX.ShowNotification("Vous ne pouvez pas sortir ce véhicule. Allez la chercher!")
-				end				
+				end
 			end
 		end,
 		function(data, menu)
@@ -397,9 +382,8 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+						if IsControlJustReleased(0, 38) and IsInputDisabled(0) and not IsPedInAnyVehicle(PlayerPedId()) then
 							v.Functionmenu(v, "personal")
-							GUI.Time = GetGameTimer()
 						end
 					end,
 				},
@@ -413,7 +397,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				imageId = Config.Blip.sprite,
 			},
 			locations = {
-				v.Pos				
+				v.Pos
 			},
 		})
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_spawnpoint", {
@@ -429,9 +413,8 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.SpawnPoint.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+						if IsControlJustReleased(0, 38) and IsInputDisabled(0) and not IsPedInAnyVehicle(PlayerPedId()) then
 							v.SpawnPoint.Functionmenu(v, "personal")
-							GUI.Time = GetGameTimer()
 						end
 					end,
 				},
@@ -460,9 +443,8 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.DeletePoint.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 then
+						if IsControlJustReleased(0, 38) and IsInputDisabled(0) then
 							v.DeletePoint.Functionmenu("personal")
-							GUI.Time = GetGameTimer()
 						end
 					end,
 				},
@@ -479,7 +461,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 			},
 		})
 	end
-	
+
 	for k,v in pairs (Config.GaragesMecano) do
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_mecanospawnpoint", {
 			enable = false,
@@ -495,9 +477,8 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.SpawnPoint.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+						if IsControlJustReleased(0, 38) and IsInputDisabled(0) and not IsPedInAnyVehicle(PlayerPedId()) then
 							v.SpawnPoint.Functionmenu(v)
-							GUI.Time = GetGameTimer()
 						end
 					end,
 				},
@@ -532,9 +513,8 @@ AddEventHandler('ft_libs:OnClientReady', function()
 				active = {
 					callback = function()
 						exports.ft_libs:HelpPromt(v.DeletePoint.HelpPrompt)
-						if IsControlJustPressed(1, 38) and GetLastInputMethod(2) and (GetGameTimer() - GUI.Time) > 150 then
+						if IsControlJustReleased(0, 38) and IsInputDisabled(0) then
 							v.DeletePoint.Functionmenu()
-							GUI.Time = GetGameTimer()
 						end
 					end,
 				},
@@ -553,52 +533,26 @@ AddEventHandler('ft_libs:OnClientReady', function()
 	end
 end)
 
--- Fin controle touche
-function dump(o, nb)
-  if nb == nil then
-    nb = 0
-  end
-   if type(o) == 'table' then
-      local s = ''
-      for i = 1, nb + 1, 1 do
-        s = s .. "    "
-      end
-      s = '{\n'
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-          for i = 1, nb, 1 do
-            s = s .. "    "
-          end
-         s = s .. '['..k..'] = ' .. dump(v, nb + 1) .. ',\n'
-      end
-      for i = 1, nb, 1 do
-        s = s .. "    "
-      end
-      return s .. '}'
-   else
-      return tostring(o)
-   end
-end
+function table.empty(parsedTable)
+	for _, _ in pairs(parsedTable) do
+		return false
+	end
 
-function table.empty (self)
-    for _, _ in pairs(self) do
-        return false
-    end
-    return true
+	return true
 end
 
 --- garage societe
 
 RegisterNetEvent('esx_eden_garage:ListVehiclesMenu')
 AddEventHandler('esx_eden_garage:ListVehiclesMenu', function(garage, society)
-	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+	if not IsPedInAnyVehicle(PlayerPedId()) then
 		ListVehiclesMenu(garage, society)
 	end
 end)
 
 RegisterNetEvent('esx_eden_garage:OpenMenuGarage')
 AddEventHandler('esx_eden_garage:OpenMenuGarage', function(garage, society)
-	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+	if not IsPedInAnyVehicle(PlayerPedId()) then
 		OpenMenuGarage(garage, society)
 	end
 end)
