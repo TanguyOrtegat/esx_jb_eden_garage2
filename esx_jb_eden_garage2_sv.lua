@@ -24,15 +24,8 @@ end)
 
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
-	local _source = source
-	local vehicules = {}
-
-	MySQL.Async.fetchAll("select * from owned_vehicles inner join characters on owned_vehicles.owner = characters.identifier where fourrieremecano=@fourrieremecano",{['@fourrieremecano'] = true}, function(data)
-		for _,v in pairs(data) do
-			local plate = v.plate
-			table.insert(vehicules, {vehicle = v.vehicle, state = v.state, fourrieremecano = v.fourrieremecano, firstname = v.firstname, lastname = v.lastname, plate = plate})
-		end
-		cb(vehicules)
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles INNER JOIN characters ON owned_vehicles.owner = characters.identifier WHERE fourrieremecano = TRUE", {}, function(result)
+		cb(result)
 	end)
 end)
 -- Fin --Recupere les véhicules
@@ -129,20 +122,18 @@ AddEventHandler('eden_garage:renamevehicle', function(vehicleplate, name)
 end)
 
 ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, KindOfVehicle)
-	local _source = source
-	local vehicules = {}
-	local identifier = ""
+	local identifier
+
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = GetPlayerIdentifiers(_source)[1]
+		identifier = GetPlayerIdentifiers(source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier AND (state=false OR fourrieremecano=true)",{['@identifier'] = identifier}, function(data)
-		for _,v in pairs(data) do
-			table.insert(vehicules, {vehicle = v.vehicle, fourrieremecano = v.fourrieremecano, vehiclename =  v.vehiclename})
-		end
-		cb(vehicules)
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (state = FALSE OR fourrieremecano = TRUE)",{
+		['@identifier'] = identifier
+	}, function(result)
+		cb(result)
 	end)
 end)
 

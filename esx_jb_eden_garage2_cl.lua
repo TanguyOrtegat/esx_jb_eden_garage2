@@ -126,35 +126,35 @@ end
 
 -- Afficher les listes des vehicules de fourriere
 function ListVehiclesFourriereMenu(garage)
-	local elements = {}
+	local elements, vehiclePropsList = {}, {}
 
 	ESX.TriggerServerCallback('eden_garage:getVehiclesMecano', function(vehicles)
 
-		for _,v in pairs(vehicles) do
-			v.vehicle = json.decode(v.vehicle)
-			local vehicleHash = v.vehicle.model
+		for k,v in ipairs(vehicles) do
+			local vehicleProps = json.decode(v.vehicle)
+			vehiclePropsList[vehicleProps.plate] = vehicleProps
+			local vehicleHash = vehicleProps.model
 			local vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 
-			table.insert(elements, {label =vehicleName.." | "..v.firstname.." "..v.lastname , value = v})
-
+			table.insert(elements, {
+				label = ('%s | %s %s'):format(vehicleName, v.firstname, v.lastname),
+				plate = vehicleProps.plate
+			})
 		end
 
-		ESX.UI.Menu.Open(
-		'default', GetCurrentResourceName(), 'spawn_vehicle_mecano',
-		{
+		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'spawn_vehicle_mecano', {
 			title    = 'Garage',
 			align    = 'top-left',
 			elements = elements,
-		},
-		function(data, menu)
+		}, function(data, menu)
+			local vehicleProps = vehiclePropsList[data.current.plate]
 			menu.close()
-			SpawnVehicleMecano(data.current.value.vehicle, garage)
-			TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', data.current.value.vehicle, false)
-		end,
-		function(data, menu)
+			SpawnVehicleMecano(vehicleProps, garage)
+			TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, false)
+		end, function(data, menu)
 			menu.close()
-		end
-	)
+		end)
+
 	end)
 end
 -- Fin Afficher les listes des vehicules de fourriere
@@ -287,13 +287,15 @@ end
 function ReturnVehicleMenu(garage, KindOfVehicle)
 
 	ESX.TriggerServerCallback('eden_garage:getOutVehicles', function(vehicles)
-		local elements = {}
+		local elements, vehiclePropsList = {}, {}
+
 		if not table.empty(vehicles) then
-			for _,v in pairs(vehicles) do
-				v.vehicle = json.decode(v.vehicle)
-				local vehicleHash = v.vehicle.model
-				local vehicleName
-				local vehicleLabel
+			for k,v in ipairs(vehicles) do
+				local vehicleProps = json.decode(v.vehicle)
+				vehiclePropsList[vehicleProps.plate] = vehicleProps
+				local vehicleHash = vehicleProps.model
+				local vehicleName, vehicleLabel
+
 				if v.vehiclename == 'voiture' then
 					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				else
@@ -302,43 +304,48 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 
 				if v.fourrieremecano then
 					vehicleLabel = vehicleName..': Fourrière externe'
-					table.insert(elements, {label =vehicleLabel , value = 'fourrieremecano'})
+					table.insert(elements, {label = vehicleLabel, action = 'fourrieremecano'})
 				else
 					vehicleLabel = vehicleName..': Sortie'
-					table.insert(elements, {label =vehicleLabel , value = v.vehicle})
+					table.insert(elements, {
+						label = vehicleLabel,
+						plate = vehicleProps.plate,
+						action = 'store'
+					})
 				end
 			end
 		else
-			table.insert(elements, {label ="Pas de véhicule a sortir" , value = nil})
+			table.insert(elements, {label = "Pas de véhicule a sortir", action = 'nothing'})
 		end
 
-		ESX.UI.Menu.Open(
-		'default', GetCurrentResourceName(), 'return_vehicle',
-		{
+		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'return_vehicle', {
 			title    = 'Garage',
 			align    = 'top-left',
-			elements = elements,
-		},
-		function(data, menu)
-			if data.current.value == 'fourrieremecano' then
+			elements = elements
+		}, function(data, menu)
+			local vehicleProps = vehiclePropsList[data.current.plate]
+
+			if data.current.action == 'fourrieremecano' then
 				ESX.ShowNotification("Va voir la police ou mecano pour savoir comment recuperer ton véhicule.")
-			elseif data.current.value ~= nil then
-				local iscaronearth = false
-				for k,v in pairs (carInstance) do
-					if ESX.Math.Trim(v.plate) == ESX.Math.Trim(data.current.value.plate) then
+			elseif data.current.action == 'store' then
+				local doesVehicleExist = false
+
+				for k,v in pairs(carInstance) do
+					if ESX.Math.Trim(v.plate) == ESX.Math.Trim(data.current.plate) then
 						if DoesEntityExist(v.vehicleentity) then
-							iscaronearth = true
+							doesVehicleExist = true
 						else
 							table.remove(carInstance, k)
-							iscaronearth = false
+							doesVehicleExist = false
 						end
 					end
 				end
-				if not iscaronearth then
+
+				if not doesVehicleExist then
 					ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
 						if hasEnoughMoney then
 							menu.close()
-							SpawnVehicle(data.current.value, garage, KindOfVehicle)
+							SpawnVehicle(vehicleProps, garage, KindOfVehicle)
 						else
 							ESX.ShowNotification('Vous n\'avez pas assez d\'argent')
 						end
@@ -347,12 +354,11 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 					ESX.ShowNotification("Vous ne pouvez pas sortir ce véhicule. Allez la chercher!")
 				end
 			end
-		end,
-		function(data, menu)
+		end, function(data, menu)
 			menu.close()
-		end
-		)
+		end)
 	end, KindOfVehicle)
+
 end
 
 function exitmarker()
