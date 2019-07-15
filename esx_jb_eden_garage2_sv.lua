@@ -5,21 +5,19 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindOfVehicle)
-	local _source = source
 	local vehicules = {}
 	local identifier = ""
+
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = GetPlayerIdentifiers(_source)[1]
+		identifier = GetPlayerIdentifiers(source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner=@identifier",{['@identifier'] = identifier}, function(data)
-		for _,v in pairs(data) do
-			local plate = v.plate
-			table.insert(vehicules, {vehicle = v.vehicle, state = v.state, fourrieremecano = v.fourrieremecano, plate = plate, vehiclename = v.vehiclename})
-		end
-		cb(vehicules)
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier", {
+		['@identifier'] = identifier
+	}, function(result)
+		cb(result)
 	end)
 end)
 -- Fin --Recupere les véhicules$

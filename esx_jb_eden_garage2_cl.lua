@@ -44,88 +44,82 @@ function OpenMenuGarage(garage, KindOfVehicle)
 end
 -- Afficher les listes des vehicules
 function ListVehiclesMenu(garage, KindOfVehicle)
-	local elements = {}
-	local vehicleName = ""
+	local elements, vehiclePropsList = {}, {}
+
 	ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicles)
 		if not table.empty(vehicles) then
-			for _,v in pairs(vehicles) do
-				v.vehicle = json.decode(v.vehicle)
-				local hashVehicule = v.vehicle.model
+			for k,v in ipairs(vehicles) do
+				local vehicleProps = json.decode(v.vehicles)
+				vehiclePropsList[vehicleProps.plate] = vehicleProps
+				local vehicleHash = vehicleProps.model
+				local vehicleName, vehicleLabel
+
 				if v.vehiclename == 'voiture' then
-					vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
+					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				else
 					vehicleName = v.vehiclename
 				end
-				local labelvehicle
-				if(v.fourrieremecano)then
-					labelvehicle = vehicleName..': Fourrière externe'
-				elseif (v.state)  then
-					labelvehicle = vehicleName..': Rentré'
-				else
-					labelvehicle = vehicleName..': Sortie'
-				end
-				table.insert(elements, {label =labelvehicle , value = v})
 
+				if v.fourrieremecano then
+					vehicleLabel = vehicleName..': Fourrière externe'
+				elseif v.state then
+					vehicleLabel = vehicleName..': Rentré'
+				else
+					vehicleLabel = vehicleName..': Sortie'
+				end
+
+				table.insert(elements, {
+					label = vehicleLabel,
+					vehicleName = vehicleName,
+					state = v.state,
+					plate = vehicleProps.plate,
+					fourrieremecano = v.fourrieremecano,
+				})
 			end
 		else
-			table.insert(elements, {label ="Pas de voitures dans le garage" , value = nil})
+			table.insert(elements, {label = "Pas de voitures dans le garage"})
 		end
-		ESX.UI.Menu.Open(
-		'default', GetCurrentResourceName(), 'spawn_vehicle',
-		{
+
+		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'spawn_vehicle', {
 			title    = 'Garage',
 			align    = 'top-left',
 			elements = elements,
-		},
-		function(data, menu)
-			local elem = {}
-			table.insert(elem, {label ="Sortir la voiture" , value = 'get_vehicle_out'})
-			table.insert(elem, {label ="Renommer la voiture" , value = 'rename_vehicle'})
-			if data.current.value.vehiclename == 'voiture' then
-				vehicleName = GetDisplayNameFromVehicleModel(data.current.value.vehicle.model)
-			else
-				vehicleName = data.current.value.vehiclename
-			end
-			ESX.UI.Menu.Open(
-				'default', GetCurrentResourceName(), 'vehicle_menu',
-				{
-					title    =  vehicleName,
-					align    = 'top-left',
-					elements = elem,
-				},
-				function(data2, menu2)
-					if data2.current.value == "get_vehicle_out" then
-						if (data.current.value.fourrieremecano) then
-							TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
-						elseif (data.current.value.state) then
-							menu.close()
-							menu2.close()
-							SpawnVehicle(data.current.value.vehicle, garage, KindOfVehicle)
-						else
-							TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
-						end
-					elseif data2.current.value == "rename_vehicle" then
-						AddTextEntry('FMMC_KEY_TIP8', "Nom du véhicule souhaité")
-						DisplayOnscreenKeyboard(false, "FMMC_KEY_TIP8", "", "", "", "", "", 64)
-						while (UpdateOnscreenKeyboard() == 0) do
-								DisableAllControlActions(0);
-								Wait(0);
-						end
-						if (GetOnscreenKeyboardResult()) then
-							local name = GetOnscreenKeyboardResult()
-							TriggerServerEvent('eden_garage:renamevehicle', data.current.value.plate, name)
-						end
+		}, function(data, menu)
+			local vehicleProps = vehiclePropsList[data.current.plate]
+
+			ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'vehicle_menu', {
+				title    =  data.current.vehicleName,
+				align    = 'top-left',
+				elements = {
+					{label ="Sortir la voiture" , value = 'get_vehicle_out'},
+					{label ="Renommer la voiture" , value = 'rename_vehicle'}
+			}}, function(data2, menu2)
+				if data2.current.value == "get_vehicle_out" then
+					if data.current.fourrieremecano then
+						TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
+					elseif data.current.state then
+						menu.close()
+						menu2.close()
+						SpawnVehicle(vehicleProps, garage, KindOfVehicle)
+					else
+						TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
 					end
-				end,
-				function(data2, menu2)
-					menu2.close()
+				elseif data2.current.value == "rename_vehicle" then
+					ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'rename_vehicle', {
+						title = 'Nom du véhicule souhaité'
+					}, function(data3, menu3)
+						TriggerServerEvent('eden_garage:renamevehicle', data.current.plate, data3.value)
+						menu3.close()
+					end, function(data3, menu3)
+						menu3.close()
+					end)
 				end
-			)
-		end,
-		function(data, menu)
+			end, function(data2, menu2)
+				menu2.close()
+			end)
+		end, function(data, menu)
 			menu.close()
-		end
-	)
+		end)
 	end, KindOfVehicle)
 end
 -- Fin Afficher les listes des vehicules
@@ -138,8 +132,8 @@ function ListVehiclesFourriereMenu(garage)
 
 		for _,v in pairs(vehicles) do
 			v.vehicle = json.decode(v.vehicle)
-			local hashVehicule = v.vehicle.model
-			local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
+			local vehicleHash = v.vehicle.model
+			local vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 
 			table.insert(elements, {label =vehicleName.." | "..v.firstname.." "..v.lastname , value = v})
 
@@ -297,21 +291,21 @@ function ReturnVehicleMenu(garage, KindOfVehicle)
 		if not table.empty(vehicles) then
 			for _,v in pairs(vehicles) do
 				v.vehicle = json.decode(v.vehicle)
-				local hashVehicule = v.vehicle.model
+				local vehicleHash = v.vehicle.model
 				local vehicleName
-				local labelvehicle
+				local vehicleLabel
 				if v.vehiclename == 'voiture' then
-					vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
+					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				else
 					vehicleName = v.vehiclename
 				end
 
 				if v.fourrieremecano then
-					labelvehicle = vehicleName..': Fourrière externe'
-					table.insert(elements, {label =labelvehicle , value = 'fourrieremecano'})
+					vehicleLabel = vehicleName..': Fourrière externe'
+					table.insert(elements, {label =vehicleLabel , value = 'fourrieremecano'})
 				else
-					labelvehicle = vehicleName..': Sortie'
-					table.insert(elements, {label =labelvehicle , value = v.vehicle})
+					vehicleLabel = vehicleName..': Sortie'
+					table.insert(elements, {label =vehicleLabel , value = v.vehicle})
 				end
 			end
 		else
