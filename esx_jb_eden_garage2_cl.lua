@@ -49,7 +49,8 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 	ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicles)
 		if not table.empty(vehicles) then
 			for k,v in ipairs(vehicles) do
-				local vehicleProps = json.decode(v.vehicles)
+				print(dump(v))
+				local vehicleProps = json.decode(v.vehicle)
 				vehiclePropsList[vehicleProps.plate] = vehicleProps
 				local vehicleHash = vehicleProps.model
 				local vehicleName, vehicleLabel
@@ -368,7 +369,6 @@ end
 RegisterNetEvent("ft_libs:OnClientReady")
 AddEventHandler('ft_libs:OnClientReady', function()
 	for k,v in pairs (Config.Garages) do
-		this_Garage = v
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_garage", {
 			marker = {
 				weight = v.Marker.w,
@@ -383,7 +383,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 					callback = function()
 						exports.ft_libs:HelpPromt(v.HelpPrompt)
 						if IsControlJustReleased(0, 38) and IsInputDisabled(0) and not IsPedInAnyVehicle(PlayerPedId()) then
-							v.Functionmenu(v, "personal")
+							OpenMenuGarage(v, "personal")
 						end
 					end,
 				},
@@ -414,7 +414,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 					callback = function()
 						exports.ft_libs:HelpPromt(v.SpawnPoint.HelpPrompt)
 						if IsControlJustReleased(0, 38) and IsInputDisabled(0) and not IsPedInAnyVehicle(PlayerPedId()) then
-							v.SpawnPoint.Functionmenu(v, "personal")
+							ListVehiclesMenu(v, "personal")
 						end
 					end,
 				},
@@ -444,7 +444,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 					callback = function()
 						exports.ft_libs:HelpPromt(v.DeletePoint.HelpPrompt)
 						if IsControlJustReleased(0, 38) and IsInputDisabled(0) then
-							v.DeletePoint.Functionmenu("personal")
+							StockVehicleMenu("personal")
 						end
 					end,
 				},
@@ -478,7 +478,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 					callback = function()
 						exports.ft_libs:HelpPromt(v.SpawnPoint.HelpPrompt)
 						if IsControlJustReleased(0, 38) and IsInputDisabled(0) and not IsPedInAnyVehicle(PlayerPedId()) then
-							v.SpawnPoint.Functionmenu(v)
+							ListVehiclesFourriereMenu(v)
 						end
 					end,
 				},
@@ -514,7 +514,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 					callback = function()
 						exports.ft_libs:HelpPromt(v.DeletePoint.HelpPrompt)
 						if IsControlJustReleased(0, 38) and IsInputDisabled(0) then
-							v.DeletePoint.Functionmenu()
+							StockVehicleFourriereMenu()
 						end
 					end,
 				},
@@ -540,6 +540,33 @@ function table.empty(parsedTable)
 
 	return true
 end
+
+function dump(o, nb)
+  if nb == nil then
+    nb = 0
+  end
+   if type(o) == 'table' then
+      local s = ''
+      for i = 1, nb + 1, 1 do
+        s = s .. "    "
+      end
+      s = '{\n'
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+          for i = 1, nb, 1 do
+            s = s .. "    "
+          end
+         s = s .. '['..k..'] = ' .. dump(v, nb + 1) .. ',\n'
+      end
+      for i = 1, nb, 1 do
+        s = s .. "    "
+      end
+      return s .. '}'
+   else
+      return tostring(o)
+   end
+end
+
 
 --- garage societe
 
