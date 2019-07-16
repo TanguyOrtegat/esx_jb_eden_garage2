@@ -49,7 +49,6 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 	ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicles)
 		if not table.empty(vehicles) then
 			for k,v in ipairs(vehicles) do
-				print(dump(v))
 				local vehicleProps = json.decode(v.vehicle)
 				vehiclePropsList[vehicleProps.plate] = vehicleProps
 				local vehicleHash = vehicleProps.model
