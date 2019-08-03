@@ -370,6 +370,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 	for k,v in pairs (Config.Garages) do
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_garage", {
 			marker = {
+				type = v.Marker.t,
 				weight = v.Marker.w,
 				height = v.Marker.h,
 				red = v.Marker.r,
@@ -401,6 +402,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 		})
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_spawnpoint", {
 			marker = {
+				type = v.SpawnPoint.Marker.t,
 				weight = v.SpawnPoint.Marker.w,
 				height = v.SpawnPoint.Marker.h,
 				red = v.SpawnPoint.Marker.r,
@@ -431,6 +433,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 		})
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_deletepoint", {
 			marker = {
+				type = v.DeletePoint.Marker.t,
 				weight = v.DeletePoint.Marker.w,
 				height = v.DeletePoint.Marker.h,
 				red = v.DeletePoint.Marker.r,
@@ -465,6 +468,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_mecanospawnpoint", {
 			enable = false,
 			marker = {
+				type = v.SpawnPoint.Marker.t,
 				weight = v.SpawnPoint.Marker.w,
 				height = v.SpawnPoint.Marker.h,
 				red = v.SpawnPoint.Marker.r,
@@ -501,6 +505,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 		exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_mecanodeletepoint", {
 			enable = false,
 			marker = {
+				type = v.DeletePoint.Marker.t,
 				weight = v.DeletePoint.Marker.w,
 				height = v.DeletePoint.Marker.h,
 				red = v.DeletePoint.Marker.r,
