@@ -127,18 +127,18 @@ Config.Garages = {
 	},
 	Garage_Lake = {
 		Pos = {x = -73.165504455566,y = 908.08734130859,z = 235.62712097168 },
-		Marker = { w= 1.5.0, h= 1.0,r = 204, g = 204, b = 0},
+		Marker = {t=1, w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
 		Name = 'Garage',
 		HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage",
 		SpawnPoint = {
 			Pos = {x = -72.099822998047,y = 902.85479736328,z = 235.63186645508 },
 			Heading = 134.409,
-			Marker = { w= 1.5.0, h= 1.0,r=0,g=255,b=0},
+			Marker = {t=1, w= 1.5, h= 1.0,r=0,g=255,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre véhicule",
 		},
 		DeletePoint = {
 			Pos = {x = -66.987632751465,y = 891.65881347656,z = 235.55270385742 },
-			Marker = { w= 1.5.0, h= 1.0,r=255,g=0,b=0},
+			Marker = {t=1, w= 1.5, h= 1.0,r=255,g=0,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre véhicule",
 		},
 	},
