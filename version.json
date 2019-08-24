@@ -1,11 +1,6 @@
 {
-  "version":"2.2.0",
+  "version":"2.2.1",
   "patchnote" : [
-    "- clean up code",
-    "- fix messagepack error for more then 30 vehicles",
-    "- Moved Sync tasks to Async",
-    "- Proper resource manifest information",
-    "- Use updated native names (player ped & IsInputDisabled)",
-    "- great thanks to ElPumpo !!"
+    "- fix renaming vehicle to nil value cannot open garage"
   ]
 }
