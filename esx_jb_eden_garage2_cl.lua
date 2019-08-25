@@ -108,7 +108,7 @@ function ListVehiclesMenu(garage, KindOfVehicle)
 					ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'rename_vehicle', {
 						title = 'Nom du véhicule souhaité'
 					}, function(data3, menu3)
-						if if string.len(data3.value) >= 1 then then
+						if string.len(data3.value) >= 1 then
 							TriggerServerEvent('eden_garage:renamevehicle', data.current.plate, data3.value)
 						else
 							ESX.ShowNotification("Le nom du véhicule ne peut pas être vide")
