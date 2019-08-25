@@ -55,3 +55,10 @@ and run this script once if you haven't plate column:
 https://github.com/TanguyOrtegat/esx_jb_migrate
 
  with command migrate
+
+ #UPDATE 25/08
+ ```sql
+alter table owned_vehicles add vehicle_type varchar(10) not null default 'car'
+alter table owned_vehicles add garage_name varchar(50) not null default 'Garage_Centre'
+```
+pay attention that you will need to edit your airplane dealer and boatdealer to put it in that table owned_vehicles and in where clause in SQL: where vehicle_type='boat' (for example)
