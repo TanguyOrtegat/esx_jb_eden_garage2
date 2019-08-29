@@ -239,11 +239,12 @@ function StockVehicleMenu(KindOfVehicle, garage, vehicle_type)
 						end
 						DeleteEntity(TrailerHandle)
 						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
+						TriggerServerEvent("esx_eden_garage:MoveGarage", trailerProps.plate, garage_name)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
-				end,trailerProps, KindOfVehicle, garage, vehicle_type)
+				end,trailerProps, KindOfVehicle, garage_name, vehicle_type)
 			else
 				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
@@ -255,11 +256,12 @@ function StockVehicleMenu(KindOfVehicle, garage, vehicle_type)
 						end
 						DeleteEntity(vehicle)
 						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
+						TriggerServerEvent("esx_eden_garage:MoveGarage", vehicleProps.plate, garage_name)
 						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
-				end,vehicleProps, KindOfVehicle, garage, vehicle_type)
+				end,vehicleProps, KindOfVehicle, garage_name, vehicle_type)
 			end
 		else
 			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
