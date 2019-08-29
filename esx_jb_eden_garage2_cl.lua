@@ -657,9 +657,9 @@ AddEventHandler('ft_libs:OnClientReady', function()
 			},
 			locations = {
 				{
-					x = v.SpawnPoint.Pos.x,
-					y = v.SpawnPoint.Pos.y,
-					z = v.SpawnPoint.Pos.z,
+					x = v.SpawnPoint.MarkerPos.x,
+					y = v.SpawnPoint.MarkerPos.y,
+					z = v.SpawnPoint.MarkerPos.z,
 				},
 			},
 		})
