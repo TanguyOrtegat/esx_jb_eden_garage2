@@ -404,6 +404,7 @@ Config.BoatGarages = {
 		HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de navire",
 		SpawnPoint = {
 			Pos = {x = -736.47064208984,y = -1342.4702148438,z = 1.0 },
+			MarkerPos = {x = -733.58,y = -1338.62,z = 1.5 },
 			Heading = 230.0,
 			Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre navire"
