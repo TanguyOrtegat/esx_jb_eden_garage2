@@ -222,7 +222,7 @@ end
 
 
 -- Fonction qui permet de rentrer un vehicule
-function StockVehicleMenu(KindOfVehicle, garage, vehicle_type)
+function StockVehicleMenu(KindOfVehicle, garage_name, vehicle_type)
 	local playerPed  = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
