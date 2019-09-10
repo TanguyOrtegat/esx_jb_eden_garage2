@@ -131,6 +131,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 											if hasEnoughMoney then
 												TriggerServerEvent("esx_eden_garage:MoveGarage",data.current.plate, garage_name)
 												SpawnVehicle(vehicleProps, garage, KindOfVehicle)
+												menu.close()
 												menu2.close()
 												menu3.close()
 											else
