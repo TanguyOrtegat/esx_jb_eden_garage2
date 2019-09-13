@@ -112,7 +112,20 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 					{label ="Renommer la voiture" , value = 'rename_vehicle'}
 			}}, function(data2, menu2)
 					if data2.current.value == "get_vehicle_out" then
-                        if (data.current.fourrieremecano) then
+						local doesVehicleExist = false
+						for k,v in pairs (carInstance) do
+							if ESX.Math.Trim(v.plate) == ESX.Math.Trim(data.current.plate) then
+								if DoesEntityExist(v.vehicleentity) then
+									doesVehicleExist = true
+								else
+									table.remove(carInstance, k)
+									doesVehicleExist = false
+								end
+							end
+						end
+                        if (doesVehicleExist) then
+							TriggerEvent('esx:showNotification', 'Vous ne pouvez pas sortir ce véhicule. Allez la chercher!')
+                        elseif (data.current.fourrieremecano) then
                             TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
                         elseif garage_name ~= data.current.garage_name then
 							local elem = {}

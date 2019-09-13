@@ -1,9 +1,7 @@
 {
-  "version":"3.0.0",
+  "version":"3.0.1",
   "patchnote" : [
-    "- fix renaming vehicle to nil value cannot open garage",
-    "- each garage has own cars",
-	"- transfer vehicle from one garage to antoher",
-	"- BIG UPDATE: 3 in 1 garage: vehicle, boat and airplanes"
+    "- fix moving garage thanks to CryptoGenics",
+    "- fix multiple spawn if you take car out in another garage"
   ]
 }
