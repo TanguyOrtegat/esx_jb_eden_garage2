@@ -131,6 +131,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 											if hasEnoughMoney then
 												TriggerServerEvent("esx_eden_garage:MoveGarage",data.current.plate, garage_name)
 												SpawnVehicle(vehicleProps, garage, KindOfVehicle)
+												menu.close()
 												menu2.close()
 												menu3.close()
 											else
@@ -222,7 +223,7 @@ end
 
 
 -- Fonction qui permet de rentrer un vehicule
-function StockVehicleMenu(KindOfVehicle, garage, vehicle_type)
+function StockVehicleMenu(KindOfVehicle, garage_name, vehicle_type)
 	local playerPed  = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed,  false) then
 		local vehicle =GetVehiclePedIsIn(playerPed,false)
@@ -239,11 +240,12 @@ function StockVehicleMenu(KindOfVehicle, garage, vehicle_type)
 						end
 						DeleteEntity(TrailerHandle)
 						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
+						TriggerServerEvent("esx_eden_garage:MoveGarage", trailerProps.plate, garage_name)
 						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
-				end,trailerProps, KindOfVehicle, garage, vehicle_type)
+				end,trailerProps, KindOfVehicle, garage_name, vehicle_type)
 			else
 				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
@@ -255,11 +257,12 @@ function StockVehicleMenu(KindOfVehicle, garage, vehicle_type)
 						end
 						DeleteEntity(vehicle)
 						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
+						TriggerServerEvent("esx_eden_garage:MoveGarage", vehicleProps.plate, garage_name)
 						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 					else
 						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
 					end
-				end,vehicleProps, KindOfVehicle, garage, vehicle_type)
+				end,vehicleProps, KindOfVehicle, garage_name, vehicle_type)
 			end
 		else
 			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
@@ -655,9 +658,9 @@ AddEventHandler('ft_libs:OnClientReady', function()
 			},
 			locations = {
 				{
-					x = v.SpawnPoint.Pos.x,
-					y = v.SpawnPoint.Pos.y,
-					z = v.SpawnPoint.Pos.z,
+					x = v.SpawnPoint.MarkerPos.x,
+					y = v.SpawnPoint.MarkerPos.y,
+					z = v.SpawnPoint.MarkerPos.z,
 				},
 			},
 		})
