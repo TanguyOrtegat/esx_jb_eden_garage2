@@ -102,8 +102,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 			elements = elements,
 		},
 		function(data, menu)
-			local vehicleProps = vehiclePropsList[data.current.plate]
-
+			local CarProps = vehiclePropsList[data.current.plate]
 			ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'vehicle_menu', {
 				title    =  data.current.vehicleName,
 				align    = 'top-left',
@@ -143,10 +142,8 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 										ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
 											if hasEnoughMoney then
 												TriggerServerEvent("esx_eden_garage:MoveGarage",data.current.plate, garage_name)
-												SpawnVehicle(vehicleProps, garage, KindOfVehicle)
-												menu.close()
-												menu2.close()
-												menu3.close()
+												SpawnVehicle(CarProps, garage, KindOfVehicle)
+												ESX.UI.Menu.CloseAll()
 											else
 												ESX.ShowNotification("Vous n'avez pas assez d'argent")
 											end
@@ -161,9 +158,8 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 								end
 							)
 						elseif (data.current.state) then
-                            menu.close()
-                            menu2.close()
-                            SpawnVehicle(vehicleProps, garage, KindOfVehicle)
+                            SpawnVehicle(CarProps, garage, KindOfVehicle)
+							ESX.UI.Menu.CloseAll()
                         else
                             TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
                         end
@@ -173,7 +169,6 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 						}, function(data3, menu3)
 							if string.len(data3.value) >= 1 then
 								TriggerServerEvent('eden_garage:renamevehicle', data.current.plate, data3.value)
-								menu3.close()
 								ESX.UI.Menu.CloseAll()
 								ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 							else
