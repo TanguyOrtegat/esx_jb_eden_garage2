@@ -1,7 +1,6 @@
 {
-  "version":"3.0.1",
+  "version":"3.0.2",
   "patchnote" : [
-    "- fix moving garage thanks to CryptoGenics",
-    "- fix multiple spawn if you take car out in another garage"
+    "- fix dupe glitch when calling back vehicles"
   ]
 }
