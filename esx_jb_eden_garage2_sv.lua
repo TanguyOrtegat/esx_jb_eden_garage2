@@ -13,7 +13,7 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindO
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier and vehicle_type=@vehicle_type", {
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
 		['@identifier'] = identifier,
 		['@vehicle_type'] = vehicle_type
 	}, function(result)
@@ -41,7 +41,7 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 	end
 	local vehplate = vehicleProps.plate
 	local vehiclemodel = vehicleProps.model
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate and owner=@identifier and vehicle_type = @vehicle_type",{['@plate'] = vehplate, ['@identifier'] = identifier, ['@vehicle_type'] = vehicle_type}, function(result)
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate and owner=@identifier and type = @vehicle_type",{['@plate'] = vehplate, ['@identifier'] = identifier, ['@vehicle_type'] = vehicle_type}, function(result)
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
 			local originalvehprops = json.decode(result[1].vehicle)
@@ -133,7 +133,7 @@ ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, Kin
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (state = FALSE OR fourrieremecano = TRUE) AND garage_name = @garage_name AND vehicle_type=@vehicle_type",{
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (state = FALSE OR fourrieremecano = TRUE) AND garage_name = @garage_name AND type=@vehicle_type",{
 		['@identifier'] = identifier,
 		['@garage_name'] = garage_name, 
 		['@vehicle_type'] = vehicle_type

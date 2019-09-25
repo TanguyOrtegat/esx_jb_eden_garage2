@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `owned_vehicles` (
   `fourrieremecano` tinyint(1) NOT NULL DEFAULT '0',
   `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture',
   `plate` varchar(50) NOT NULL,
-  `vehicle_type` varchar(10) NOT NULL DEFAULT 'car',
+  `type` varchar(10) NOT NULL DEFAULT 'car',
   PRIMARY KEY (`plate`),
   KEY `vehsowned` (`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
