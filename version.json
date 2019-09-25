@@ -2,6 +2,6 @@
   "version":"3.0.3",
   "patchnote" : [
     "- added compatibility with new esx scripts changed vehicle_type to only just type",
-    " --> download script and change in your owned_vehicle table vehicle_type to type"
+    " --> download script and change in your owned_vehicle table vehicle_type to type and state to stored"
   ]
 }
