@@ -76,7 +76,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 
 				if v.fourrieremecano then
 					vehicleLabel = vehicleName..': Fourrière externe'
-				elseif v.state then
+				elseif v.stored then
 					vehicleLabel = vehicleName..': Rentré'.." ("..v.garage_name..")"
 				else
 					vehicleLabel = vehicleName..': Sortie'.." ("..v.garage_name..")"
@@ -84,7 +84,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				table.insert(elements, {
 					label = vehicleLabel,
 					vehicleName = vehicleName,
-					state = v.state,
+					stored = v.stored,
 					plate = vehicleProps.plate,
 					fourrieremecano = v.fourrieremecano,
 					garage_name = v.garage_name
@@ -157,7 +157,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 									menu3.close()
 								end
 							)
-						elseif (data.current.state) then
+						elseif (data.current.stored) then
                             SpawnVehicle(CarProps, garage, KindOfVehicle)
 							ESX.UI.Menu.CloseAll()
                         else

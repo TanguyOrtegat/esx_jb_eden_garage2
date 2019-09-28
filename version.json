@@ -1,6 +1,7 @@
 {
-  "version":"3.0.3",
+  "version":"3.0.4",
   "patchnote" : [
+	"thanks to iTzCrutchie fixed garage state to stored",
     "- added compatibility with new esx scripts changed vehicle_type to only just type",
     " --> download script and change in your owned_vehicle table vehicle_type to type and state to stored"
   ]

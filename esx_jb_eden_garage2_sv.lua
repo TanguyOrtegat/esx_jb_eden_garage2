@@ -93,9 +93,9 @@ end)
 
 --Change le state du véhicule
 RegisterServerEvent('eden_garage:modifystate')
-AddEventHandler('eden_garage:modifystate', function(plate, state)
-	MySQL.Async.execute("UPDATE owned_vehicles SET stored =@state WHERE plate=@plate",{
-		['@state'] = state,
+AddEventHandler('eden_garage:modifystate', function(plate, stored)
+	MySQL.Async.execute("UPDATE owned_vehicles SET `stored` =@stored WHERE plate=@plate",{
+		['@stored'] = stored,
 		['@plate'] = plate
 	})
 end)	
@@ -133,7 +133,7 @@ ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, Kin
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (stored = FALSE OR fourrieremecano = TRUE) AND garage_name = @garage_name AND type=@vehicle_type",{
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (`stored` = FALSE OR fourrieremecano = TRUE) AND garage_name = @garage_name AND type=@vehicle_type",{
 		['@identifier'] = identifier,
 		['@garage_name'] = garage_name, 
 		['@vehicle_type'] = vehicle_type
@@ -158,7 +158,7 @@ end)
 if Config.StoreOnServerStart then
 	AddEventHandler('onMySQLReady', function()
 
-		MySQL.Sync.execute("UPDATE owned_vehicles SET stored=true WHERE stored=false", {})
+		MySQL.Sync.execute("UPDATE owned_vehicles SET `stored`=true WHERE `stored`=false", {})
 
 	end)
 end
