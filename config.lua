@@ -424,7 +424,7 @@ Config.AirplaneGarages = {
 		Name = 'Garage',
 		HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de aviation",
 		SpawnPoint = {
-			Pos = {x = -1280.1153564453,y = -3378.1647949219,z = 13.940155029297 },
+			Pos = {x = -1285.1153564453,y = -3382.1647949219,z = 13.940155029297 },
 			Heading = 160.0,
 			Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
 			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre engin d'aviation"
