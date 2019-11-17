@@ -436,3 +436,98 @@ Config.AirplaneGarages = {
 		}, 	
 	},
 }
+
+
+Config.SocietyGarages = {
+	police =  { -- database job name
+		{
+			Pos = {x = 446.39,y = -984.844,z = 30.696 },
+			Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
+			Name = 'Garage',
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de aviation",
+			SpawnPoint = {
+				Pos = {x = -1285.1153564453,y = -3382.1647949219,z = 13.940155029297 },
+				Heading = 160.0,
+				Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre engin d'aviation"
+			},
+			DeletePoint = {
+				Pos = {x = -1287.5788574219,y = -3390.4025878906,z = 13.940155029297 },
+				Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
+			}, 	
+		},
+		{
+			Pos = {x = 448.1153564453,y = -976.86,z = 30.696 },
+			Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
+			Name = 'Garage',
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de aviation",
+			SpawnPoint = {
+				Pos = {x = -1285.1153564453,y = -3382.1647949219,z = 13.940155029297 },
+				Heading = 160.0,
+				Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre engin d'aviation"
+			},
+			DeletePoint = {
+				Pos = {x = -1287.5788574219,y = -3390.4025878906,z = 13.940155029297 },
+				Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
+			}, 	
+		},
+	},
+	brinks =  {
+		{
+			Pos = {x = 443.1153564453,y = -993.86,z = 30.696 },
+			Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
+			Name = 'Garage',
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de aviation",
+			SpawnPoint = {
+				Pos = {x = -1285.1153564453,y = -3382.1647949219,z = 13.940155029297 },
+				Heading = 160.0,
+				Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre engin d'aviation"
+			},
+			DeletePoint = {
+				Pos = {x = -1287.5788574219,y = -3390.4025878906,z = 13.940155029297 },
+				Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
+			}, 	
+		},
+	ambulance =  {
+		{
+			Pos = {x = 443.1153564453,y = -993.86,z = 30.696 },
+			Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
+			Name = 'Garage',
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de aviation",
+			SpawnPoint = {
+				Pos = {x = -1285.1153564453,y = -3382.1647949219,z = 13.940155029297 },
+				Heading = 160.0,
+				Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre engin d'aviation"
+			},
+			DeletePoint = {
+				Pos = {x = -1287.5788574219,y = -3390.4025878906,z = 13.940155029297 },
+				Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
+			}, 	
+		},
+	},
+	taxi =  {
+		{
+			Pos = {x = 443.1153564453,y = -993.86,z = 30.696 },
+			Marker = { w= 1.5, h= 1.0,r = 204, g = 204, b = 0},
+			Name = 'Garage',
+			HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage de aviation",
+			SpawnPoint = {
+				Pos = {x = -1285.1153564453,y = -3382.1647949219,z = 13.940155029297 },
+				Heading = 160.0,
+				Marker = { w= 1.5, h= 1.0,r=0,g=255,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour sortir votre engin d'aviation"
+			},
+			DeletePoint = {
+				Pos = {x = -1287.5788574219,y = -3390.4025878906,z = 13.940155029297 },
+				Marker = { w= 1.5, h= 1.0,r=255,g=0,b=0},
+				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
+			}, 	
+		},
+}

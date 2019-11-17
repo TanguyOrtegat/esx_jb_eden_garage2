@@ -802,6 +802,108 @@ AddEventHandler('ft_libs:OnClientReady', function()
 			},
 		})
 	end
+	for k,v in pairs (Config.SocietyGarages) do
+		for key, value in pairs (v) do
+			print(dump("esx_eden_garage_area_"..k.."_garage_society_"..key))
+			exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_garage_society_"..key, {
+				enable = false,
+				marker = {
+					weight = value.Marker.w,
+					height = value.Marker.h,
+					red = value.Marker.r,
+					green = value.Marker.g,
+					blue = value.Marker.b,
+					type = 27,
+				},
+				trigger = {
+					weight = value.Marker.w,
+					active = {
+						callback = function()
+							exports.ft_libs:HelpPromt(value.HelpPrompt)
+							if IsControlJustReleased(0, 38) and IsInputDisabled(0) and GetLastInputMethod(2) and not IsPedInAnyVehicle(PlayerPedId()) then
+								OpenMenuGarage(value, "personal", k, "airplane")
+							end
+						end,
+					},
+					exit = {
+						callback = exitmarker
+					},
+				},
+				blip = {
+					text = value.Name,
+					colorId = Config.AirplaneBlip.color,
+					imageId = Config.AirplaneBlip.sprite,
+				},
+				locations = {
+					value.Pos				
+				},
+			})
+			exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_spawnpoint_society_"..key, {
+				enable = false,
+				marker = {
+					weight = value.SpawnPoint.Marker.w,
+					height = value.SpawnPoint.Marker.h,
+					red = value.SpawnPoint.Marker.r,
+					green = value.SpawnPoint.Marker.g,
+					blue = value.SpawnPoint.Marker.b,
+					type = 27,
+				},
+				trigger = {
+					weight = value.SpawnPoint.Marker.w,
+					active = {
+						callback = function()
+							exports.ft_libs:HelpPromt(value.SpawnPoint.HelpPrompt)
+							if IsControlJustReleased(0, 38) and IsInputDisabled(0) and GetLastInputMethod(2) and not IsPedInAnyVehicle(PlayerPedId()) then
+								ListVehiclesMenu(value, "personal", k, "airplane")
+							end
+						end,
+					},
+					exit = {
+						callback = exitmarker
+					},
+				},
+				locations = {
+					{
+						x = value.SpawnPoint.Pos.x,
+						y = value.SpawnPoint.Pos.y,
+						z = value.SpawnPoint.Pos.z,
+					},
+				},
+			})
+			exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_deletepoint_society_"..key, {
+				enable = false,
+				marker = {
+					weight = value.DeletePoint.Marker.w,
+					height = value.DeletePoint.Marker.h,
+					red = value.DeletePoint.Marker.r,
+					green = value.DeletePoint.Marker.g,
+					blue = value.DeletePoint.Marker.b,
+					type = 27,
+				},
+				trigger = {
+					weight = value.DeletePoint.Marker.w,
+					active = {
+						callback = function()
+							exports.ft_libs:HelpPromt(value.DeletePoint.HelpPrompt)
+							if IsControlJustReleased(0, 38) and IsInputDisabled(0) and GetLastInputMethod(2) then
+								StockVehicleMenu("personal", k, "airplane")
+							end
+						end,
+					},
+					exit = {
+						callback = exitmarker
+					},
+				},
+				locations = {
+					{
+						x = value.DeletePoint.Pos.x,
+						y = value.DeletePoint.Pos.y,
+						z = value.DeletePoint.Pos.z,
+					},
+				},
+			})
+		end
+	end
 end)
 
 -- Fin controle touche
@@ -858,3 +960,31 @@ RegisterNetEvent('esx_eden_garage:StockVehicleMenu')
 AddEventHandler('esx_eden_garage:StockVehicleMenu', function(society, societygarage)
 	StockVehicleMenu(society, societygarage, "car")
 end)
+
+
+RegisterNetEvent('esx_eden_garage:EnableSocietyGarage')
+AddEventHandler('esx_eden_garage:EnableSocietyGarage', function(society, bool)
+	if bool then
+		for k,v in pairs (Config.SocietyGarages) do
+			for key, value in pairs (v) do
+				if k == society then
+					exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_deletepoint_society_"..key)
+					exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_spawnpoint_society_"..key)
+					exports.ft_libs:EnableArea("esx_eden_garage_area_"..k.."_garage_society_"..key)
+				end
+			end
+		end
+	else
+		for k,v in pairs (Config.SocietyGarages) do
+			for key, value in pairs (v) do
+				if k == society then
+					exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_deletepoint_society_"..key)
+					exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_spawnpoint_society_"..key)
+					exports.ft_libs:DisableArea("esx_eden_garage_area_"..k.."_garage_society_"..key)
+				end
+			end
+		end
+	end
+end)
+
+
