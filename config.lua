@@ -493,6 +493,7 @@ Config.SocietyGarages = {
 				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
 			}, 	
 		},
+    },
 	ambulance =  {
 		{
 			Pos = {x = 443.1153564453,y = -993.86,z = 30.696 },
@@ -530,4 +531,5 @@ Config.SocietyGarages = {
 				HelpPrompt = "Appuyer sur ~INPUT_PICKUP~ pour rentrer votre engin d'aviation"
 			}, 	
 		},
+    },
 }
