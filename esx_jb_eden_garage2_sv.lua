@@ -13,7 +13,7 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindO
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
+	MySQL.Async.fetchAll("SELECT vehicle, vehiclename, fourrieremecano, stored, garage_name FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
 		['@identifier'] = identifier,
 		['@vehicle_type'] = vehicle_type
 	}, function(result)
@@ -24,7 +24,7 @@ end)
 
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles INNER JOIN characters ON owned_vehicles.owner = characters.identifier WHERE fourrieremecano = TRUE", {}, function(result)
+	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles INNER JOIN characters ON owned_vehicles.owner = characters.identifier WHERE fourrieremecano = TRUE", {}, function(result)
 		cb(result)
 	end)
 end)
@@ -41,7 +41,7 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 	end
 	local vehplate = vehicleProps.plate
 	local vehiclemodel = vehicleProps.model
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate and owner=@identifier and type = @vehicle_type",{['@plate'] = vehplate, ['@identifier'] = identifier, ['@vehicle_type'] = vehicle_type}, function(result)
+	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles where plate=@plate and owner=@identifier and type = @vehicle_type",{['@plate'] = vehplate, ['@identifier'] = identifier, ['@vehicle_type'] = vehicle_type}, function(result)
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
 			local originalvehprops = json.decode(result[1].vehicle)
@@ -69,7 +69,7 @@ ESX.RegisterServerCallback('eden_garage:stockvmecano',function(source,cb, vehicl
 	local plate = vehicleProps.plate
 	local vehiclemodel = vehicleProps.model
 	local identifier = GetPlayerIdentifiers(_source)[1]
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles where plate=@plate",{['@plate'] = plate}, function(result)
+	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles where plate=@plate",{['@plate'] = plate}, function(result)
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
 			local originalvehprops = json.decode(result[1].vehicle)
