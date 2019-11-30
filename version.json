@@ -1,7 +1,6 @@
 {
-  "version":"3.1.0",
+  "version":"3.1.1",
   "patchnote" : [
-	"added easy config for job vehicles",
-	"Enable / disable areas like this for example: TriggerEvent('esx_eden_garage:EnableSocietyGarage', 'police', false)"
+	"fix society vehicles garages"
   ]
 }
