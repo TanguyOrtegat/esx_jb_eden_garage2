@@ -804,7 +804,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 	end
 	for k,v in pairs (Config.SocietyGarages) do
 		for key, value in pairs (v) do
-			print(dump("esx_eden_garage_area_"..k.."_garage_society_"..key))
+			--print(dump("esx_eden_garage_area_"..k.."_garage_society_"..key))
 			exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_garage_society_"..key, {
 				enable = false,
 				marker = {
@@ -821,7 +821,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 						callback = function()
 							exports.ft_libs:HelpPromt(value.HelpPrompt)
 							if IsControlJustReleased(0, 38) and IsInputDisabled(0) and GetLastInputMethod(2) and not IsPedInAnyVehicle(PlayerPedId()) then
-								OpenMenuGarage(value, "personal", k, "airplane")
+								OpenMenuGarage(value, k, k, "car")
 							end
 						end,
 					},
@@ -854,7 +854,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 						callback = function()
 							exports.ft_libs:HelpPromt(value.SpawnPoint.HelpPrompt)
 							if IsControlJustReleased(0, 38) and IsInputDisabled(0) and GetLastInputMethod(2) and not IsPedInAnyVehicle(PlayerPedId()) then
-								ListVehiclesMenu(value, "personal", k, "airplane")
+								ListVehiclesMenu(value, k, k, "car")
 							end
 						end,
 					},
@@ -886,7 +886,7 @@ AddEventHandler('ft_libs:OnClientReady', function()
 						callback = function()
 							exports.ft_libs:HelpPromt(value.DeletePoint.HelpPrompt)
 							if IsControlJustReleased(0, 38) and IsInputDisabled(0) and GetLastInputMethod(2) then
-								StockVehicleMenu("personal", k, "airplane")
+								StockVehicleMenu(k, k, "car")
 							end
 						end,
 					},
