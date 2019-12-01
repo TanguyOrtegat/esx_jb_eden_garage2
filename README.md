@@ -17,7 +17,18 @@
  - fix glitch with cheat engine
  - ...
 
+µ
 
+If you want to use society garages:
+- first of all modify your vehicle shop that people can buy cars to their society (in owner column must be database name of the job)
+- then insert this to your script when on and off duty:
+ ```
+TriggerEvent(‘esx_eden_garage:EnableSocietyGarage’, ‘police’, true)
+
+TriggerEvent(‘esx_eden_garage:EnableSocietyGarage’, ‘police’, true)
+ ```
+ 
+ 
  ```sql
  ALTER TABLE `owned_vehicles` ADD INDEX `vehsowned` (`owner`);
  ALTER TABLE `owned_vehicles` ADD `fourrieremecano` BOOLEAN NOT NULL DEFAULT FALSE;
