@@ -116,12 +116,12 @@ end)
 
 RegisterServerEvent('eden_garage:renamevehicle')
 AddEventHandler('eden_garage:renamevehicle', function(vehicleplate, name)
-	MySQL.Sync.execute("UPDATE owned_vehicles SET vehiclename =@vehiclename WHERE plate=@plate",{['@vehiclename'] = name , ['@plate'] = vehicleplate})
+	MySQL.Async.execute("UPDATE owned_vehicles SET vehiclename =@vehiclename WHERE plate=@plate",{['@vehiclename'] = name , ['@plate'] = vehicleplate})
 end)
 
 RegisterServerEvent('esx_eden_garage:MoveGarage')
 AddEventHandler('esx_eden_garage:MoveGarage', function(vehicleplate, garage_name)
-	MySQL.Sync.execute("UPDATE owned_vehicles SET garage_name =@garage_name WHERE plate=@plate",{['@garage_name'] = garage_name , ['@plate'] = vehicleplate})
+	MySQL.Async.execute("UPDATE owned_vehicles SET garage_name =@garage_name WHERE plate=@plate",{['@garage_name'] = garage_name , ['@plate'] = vehicleplate})
 end)
 
 ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, KindOfVehicle, garage_name, vehicle_type)	
@@ -158,7 +158,7 @@ end)
 if Config.StoreOnServerStart then
 	AddEventHandler('onMySQLReady', function()
 
-		MySQL.Sync.execute("UPDATE owned_vehicles SET `stored`=true WHERE `stored`=false", {})
+		MySQL.Async.execute("UPDATE owned_vehicles SET `stored`=true WHERE `stored`=false", {})
 
 	end)
 end
