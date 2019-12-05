@@ -13,7 +13,7 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindO
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT vehicle, vehiclename, fourrieremecano, stored, garage_name FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
+	MySQL.Async.fetchAll("SELECT vehicle, vehiclename, fourrieremecano, `stored`, garage_name FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
 		['@identifier'] = identifier,
 		['@vehicle_type'] = vehicle_type
 	}, function(result)
