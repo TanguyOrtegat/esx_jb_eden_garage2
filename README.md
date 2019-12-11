@@ -73,3 +73,6 @@ alter table owned_vehicles add vehicle_type varchar(10) not null default 'car'
 alter table owned_vehicles add garage_name varchar(50) not null default 'Garage_Centre'
 ```
 pay attention that you will need to edit your airplane dealer and boatdealer to put it in that table owned_vehicles and in where clause in SQL: where vehicle_type='boat' (for example)
+
+#UPDATE 10/12
+Added options for translations and added sqls for english and french. DO NOT RUN ALL SQLS! Only choose the one that you want the language to be in. they are named owned_vehicles_en or fr for english or french.

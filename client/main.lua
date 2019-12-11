@@ -34,7 +34,7 @@ function OpenMenuGarage(garage, KindOfVehicle, garage_name, vehicle_type)
 	ESX.UI.Menu.CloseAll()
 
 	local elements = {
-		{label = "Retour vehicule ("..Config.Price.."$)", value = 'return_vehicle'},
+		{label = _U('return_vehicle') .. "("..Config.Price.."$)", value = 'return_vehicle'},
 	}
 
 
@@ -68,18 +68,18 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				local vehicleHash = vehicleProps.model
 				local vehicleName, vehicleLabel
 								
-				if v.vehiclename == 'voiture' then
+				if v.vehiclename == 'vehicle' then
 					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				else
 					vehicleName = v.vehiclename
 				end
 
 				if v.fourrieremecano then
-					vehicleLabel = vehicleName..': Fourrière externe'
+					vehicleLabel = vehicleName..': ' .. _U('pound_name')
 				elseif v.stored then
-					vehicleLabel = vehicleName..': Rentré'.." ("..v.garage_name..")"
+					vehicleLabel = vehicleName..': ' .. _U('returns') .." ("..v.garage_name..")"
 				else
-					vehicleLabel = vehicleName..': Sortie'.." ("..v.garage_name..")"
+					vehicleLabel = vehicleName..': ' .. _U('exit') .. " ("..v.garage_name..")"
 				end
 				table.insert(elements, {
 					label = vehicleLabel,
@@ -92,7 +92,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				
 			end
 		else
-			table.insert(elements, {label = "Pas de voitures dans le garage"})
+			table.insert(elements, {label = _U('no_cars_stored')})
 		end
 		ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'spawn_vehicle',
@@ -107,8 +107,8 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				title    =  data.current.vehicleName,
 				align    = 'top-left',
 				elements = {
-					{label ="Sortir la voiture" , value = 'get_vehicle_out'},
-					{label ="Renommer la voiture" , value = 'rename_vehicle'}
+					{label = _U('take_out_car') , value = 'get_vehicle_out'},
+					{label = _U('rename_the_car') , value = 'rename_vehicle'}
 			}}, function(data2, menu2)
 					if data2.current.value == "get_vehicle_out" then
 						local doesVehicleExist = false
@@ -123,17 +123,17 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 							end
 						end
                         if (doesVehicleExist) then
-							TriggerEvent('esx:showNotification', 'Vous ne pouvez pas sortir ce véhicule. Allez la chercher!')
+							TriggerEvent('esx:showNotification', _U('cannot_take_out'))
                         elseif (data.current.fourrieremecano) then
-                            TriggerEvent('esx:showNotification', 'Votre véhicule est dans la fourrieremecano')
+                            TriggerEvent('esx:showNotification', _U('vehicle_in_pound'))
                         elseif garage_name ~= data.current.garage_name then
 							local elem = {}
-							table.insert(elem, {label ="oui $"..tostring(Config.SwitchGaragePrice) , value = 'transfer_yes'})
-							table.insert(elem, {label ="non" , value = 'transfer_no'})
+							table.insert(elem, {label = _U('yes').." $"..tostring(Config.SwitchGaragePrice) , value = 'transfer_yes'})
+							table.insert(elem, {label =_U('no') , value = 'transfer_no'})
 							ESX.UI.Menu.Open(
 								'default', GetCurrentResourceName(), 'transfer_menu',
 								{
-									title    =  "Voulez vous transférer: "..data.current.vehicleName.." a votre garage?",
+									title    =  _U('want_to_transfer')..": "..data.current.vehicleName.._U('to_your_garage'),
 									align    = 'top-left',
 									elements = elem,
 								},
@@ -145,7 +145,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 												SpawnVehicle(CarProps, garage, KindOfVehicle)
 												ESX.UI.Menu.CloseAll()
 											else
-												ESX.ShowNotification("Vous n'avez pas assez d'argent")
+												ESX.ShowNotification(_U('not_enough_money'))
 											end
 										end, Config.SwitchGaragePrice)
 									else
@@ -161,18 +161,18 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
                             SpawnVehicle(CarProps, garage, KindOfVehicle)
 							ESX.UI.Menu.CloseAll()
                         else
-                            TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
+                            TriggerEvent('esx:showNotification', _U('vehicle_already_out'))
                         end
 					elseif data2.current.value == "rename_vehicle" then
 						ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'rename_vehicle', {
-							title = 'Nom du véhicule souhaité'
+							title = _U('desired_name')
 						}, function(data3, menu3)
 							if string.len(data3.value) >= 1 then
 								TriggerServerEvent('eden_garage:renamevehicle', data.current.plate, data3.value)
 								ESX.UI.Menu.CloseAll()
 								ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 							else
-								ESX.ShowNotification("Le nom du véhicule ne peut pas être vide")
+								ESX.ShowNotification(_U('cannot_be_empty'))
 								menu3.close()
 							end
 
@@ -249,9 +249,9 @@ function StockVehicleMenu(KindOfVehicle, garage_name, vehicle_type)
 						DeleteEntity(TrailerHandle)
 						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
 						TriggerServerEvent("esx_eden_garage:MoveGarage", trailerProps.plate, garage_name)
-						TriggerEvent('esx:showNotification', 'Votre remorque est dans le garage')
+						TriggerEvent('esx:showNotification', _U('trailer_in_garage'))
 					else
-						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
+						TriggerEvent('esx:showNotification', _U('cannot_store_vehicle'))
 					end
 				end,trailerProps, KindOfVehicle, garage_name, vehicle_type)
 			else
@@ -266,17 +266,17 @@ function StockVehicleMenu(KindOfVehicle, garage_name, vehicle_type)
 						DeleteEntity(vehicle)
 						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
 						TriggerServerEvent("esx_eden_garage:MoveGarage", vehicleProps.plate, garage_name)
-						TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
+						TriggerEvent('esx:showNotification', _U('vehicle_in_garage'))
 					else
-						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
+						TriggerEvent('esx:showNotification', _U('cannot_store_vehicle'))
 					end
 				end,vehicleProps, KindOfVehicle, garage_name, vehicle_type)
 			end
 		else
-			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
+			TriggerEvent('esx:showNotification', _U('not_driver'))
 		end
 	else
-		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
+		TriggerEvent('esx:showNotification', _U('no_vehicle_to_enter'))
 	end
 end
 -- Fin fonction qui permet de rentrer un vehicule 
@@ -294,9 +294,9 @@ function StockVehicleFourriereMenu()
 					if(valid) then
 						DeleteVehicle(TrailerHandle)
 						TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', trailerProps, true)
-						TriggerEvent('esx:showNotification', 'La remorque est rentré dans la fourrière')
+						TriggerEvent('esx:showNotification', _U('trailer_in_pound'))
 					else
-						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker cette remorque dans la fourrière')
+						TriggerEvent('esx:showNotification', _U('cannot_store_pound'))
 					end
 				end,trailerProps)
 			else
@@ -305,17 +305,17 @@ function StockVehicleFourriereMenu()
 					if(valid) then
 						DeleteVehicle(vehicle)
 						TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, true)
-						TriggerEvent('esx:showNotification', 'Le véhicule est rentré dans la fourrière')
+						TriggerEvent('esx:showNotification', _U('vehicle_in_pound'))
 					else
-						TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule dans la fourrière')
+						TriggerEvent('esx:showNotification', _U('cannot_store_pound'))
 					end
 				end,vehicleProps)
 			end
 		else
-			TriggerEvent('esx:showNotification', 'Vous etes pas conducteur du vehicule')
+			TriggerEvent('esx:showNotification', _U('not_driver'))
 		end
 	else
-		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
+		TriggerEvent('esx:showNotification', _U('no_vehicle_to_enter'))
 	end
 end
 -- Fin fonction qui permet de rentrer un vehicule dans fourriere
@@ -333,7 +333,7 @@ function SpawnVehicle(vehicle, garage, KindOfVehicle)
 			TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
 			local carplate = GetVehicleNumberPlateText(callback_vehicle)
 			table.insert(carInstance, {vehicleentity = callback_vehicle, plate = carplate})
-			if KindOfVehicle == 'brewer' or KindOfVehicle == 'biker' or KindOfVehicle == 'joaillerie' or KindOfVehicle == 'fermier' or KindOfVehicle == 'fisherman' or KindOfVehicle == 'fuel' or KindOfVehicle == 'johnson' or KindOfVehicle == 'miner' or KindOfVehicle == 'reporter' or KindOfVehicle == 'vignerons' or KindOfVehicle == 'tabac' then
+			if KindOfVehicle == 'brewer' or KindOfVehicle == 'biker' or KindOfVehicle == 'jewelry' or KindOfVehicle == 'farmer' or KindOfVehicle == 'fisherman' or KindOfVehicle == 'fuel' or KindOfVehicle == 'johnson' or KindOfVehicle == 'miner' or KindOfVehicle == 'reporter' or KindOfVehicle == 'winemakers' or KindOfVehicle == 'tobacco' then
 				TriggerEvent('esx_jobs1:addplate', carplate)
 				TriggerEvent('esx_jobs2:addplate', carplate)
 			end	
@@ -367,17 +367,17 @@ function ReturnVehicleMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				local vehicleHash = vehicleProps.model
 				local vehicleName, vehicleLabel
 
-				if v.vehiclename == 'voiture' then
+				if v.vehiclename == 'vehicle' then
 					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				else
 					vehicleName = v.vehiclename
 				end
 
 				if v.fourrieremecano then
-					vehicleLabel = vehicleName..': Fourrière externe'
+					vehicleLabel = vehicleName..': '.._U('pound_name')
 					table.insert(elements, {label = vehicleLabel, action = 'fourrieremecano'})
 				else
-					vehicleLabel = vehicleName..': Sortie'
+					vehicleLabel = vehicleName..': '.._U('exits')
 					table.insert(elements, {
 						label = vehicleLabel,
 						plate = vehicleProps.plate,
@@ -386,7 +386,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				end
 			end
 		else
-			table.insert(elements, {label = "Pas de véhicule a sortir", action = 'nothing'})
+			table.insert(elements, {label = _U('no_vehicle_out'), action = 'nothing'})
 		end
 
 		ESX.UI.Menu.Open(
@@ -399,7 +399,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 		function(data, menu)
 			local vehicleProps = vehiclePropsList[data.current.plate]
 			if data.current.action == 'fourrieremecano' then
-				ESX.ShowNotification("Va voir la police ou mecano pour savoir comment recuperer ton véhicule.")
+				ESX.ShowNotification(_U('see_police_mechanic'))
 			elseif data.current.action ~= nil then
 				local doesVehicleExist = false
 				for k,v in pairs (carInstance) do
@@ -418,11 +418,11 @@ function ReturnVehicleMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 							menu.close()
 							SpawnVehicle(vehicleProps, garage, KindOfVehicle)
 						else
-							ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
+							ESX.ShowNotification(_U('not_enough_money'))						
 						end
 					end, Config.Price)
 				else
-					ESX.ShowNotification("Vous ne pouvez pas sortir ce véhicule. Allez la chercher!")
+					ESX.ShowNotification(_U('cannot_take_out'))
 				end				
 			end
 		end,
