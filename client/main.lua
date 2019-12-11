@@ -79,7 +79,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				elseif v.stored then
 					vehicleLabel = vehicleName..': ' .. _U('returns') .." ("..v.garage_name..")"
 				else
-					vehicleLabel = vehicleName..': ' .. _U('exit') .. " ("..v.garage_name..")"
+					vehicleLabel = vehicleName..': ' .. _U('exits') .. " ("..v.garage_name..")"
 				end
 				table.insert(elements, {
 					label = vehicleLabel,
