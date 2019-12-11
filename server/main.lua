@@ -13,7 +13,7 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindO
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT vehicle, vehiclename, fourrieremecano, `stored`, garage_name FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
+	MySQL.Async.fetchAll("SELECT vehicle, vehiclename, pound, `stored`, garage_name FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
 		['@identifier'] = identifier,
 		['@vehicle_type'] = vehicle_type
 	}, function(result)
@@ -24,7 +24,7 @@ end)
 
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
-	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles INNER JOIN characters ON owned_vehicles.owner = characters.identifier WHERE fourrieremecano = TRUE", {}, function(result)
+	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles INNER JOIN characters ON owned_vehicles.owner = characters.identifier WHERE pound = TRUE", {}, function(result)
 		cb(result)
 	end)
 end)
@@ -101,14 +101,14 @@ AddEventHandler('eden_garage:modifystate', function(plate, stored)
 end)	
 --Fin change le state du véhicule
 
-RegisterServerEvent('eden_garage:ChangeStateFromFourriereMecano')
-AddEventHandler('eden_garage:ChangeStateFromFourriereMecano', function(vehicleProps, fourrieremecano)
+RegisterServerEvent('eden_garage:ChangeStateFrompound')
+AddEventHandler('eden_garage:ChangeStateFrompound', function(vehicleProps, pound)
 	local _source = source
 	local vehicleplate = vehicleProps.plate
-	local fourrieremecano = fourrieremecano
+	local pound = pound
 	
-	MySQL.Async.execute("UPDATE owned_vehicles SET fourrieremecano =@fourrieremecano WHERE plate=@plate",{
-		['@fourrieremecano'] = fourrieremecano,
+	MySQL.Async.execute("UPDATE owned_vehicles SET pound =@pound WHERE plate=@plate",{
+		['@pound'] = pound,
 		['@plate'] = vehicleplate
 	})
 end)
@@ -133,7 +133,7 @@ ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, Kin
 		identifier = GetPlayerIdentifiers(_source)[1]
 	end
 
-	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (`stored` = FALSE OR fourrieremecano = TRUE) AND garage_name = @garage_name AND type=@vehicle_type",{
+	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (`stored` = FALSE OR pound = TRUE) AND garage_name = @garage_name AND type=@vehicle_type",{
 		['@identifier'] = identifier,
 		['@garage_name'] = garage_name, 
 		['@vehicle_type'] = vehicle_type

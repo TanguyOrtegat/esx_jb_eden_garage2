@@ -25,17 +25,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `owned_vehicles`
+-- Table structure for table `owned_vehicles`
 --
 
 DROP TABLE IF EXISTS `owned_vehicles`;
 CREATE TABLE IF NOT EXISTS `owned_vehicles` (
   `vehicle` longtext NOT NULL,
   `owner` varchar(60) NOT NULL,
-  `stored` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Etat de la voiture',
+  `stored` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'State of the vehicle',
   `garage_name` varchar(50) NOT NULL DEFAULT 'Garage_Centre',
-  `fourrieremecano` tinyint(1) NOT NULL DEFAULT '0',
-  `vehiclename` varchar(50) NOT NULL DEFAULT 'voiture',
+  `pound` tinyint(1) NOT NULL DEFAULT '0',
+  `vehiclename` varchar(50) NOT NULL DEFAULT 'vehicle',
   `plate` varchar(50) NOT NULL,
   `type` varchar(10) NOT NULL DEFAULT 'car',
   `job` varchar(50),
