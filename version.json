@@ -1,7 +1,7 @@
 {
-  "version":"3.2.0",
+  "version":"3.3.0",
   "patchnote" : [
-	"Added locales",
-	"Changed folders"
+	"Update to latest manifest compatibility", 
+      "Removed __resource.lua to replace with fxmanifest.lua"
   ]
 }
