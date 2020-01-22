@@ -1,6 +1,6 @@
 fx_version 'adamant'
 
-game 'gta5
+game 'gta5'
 
 description 'ESX JB Eden Garage'
 
