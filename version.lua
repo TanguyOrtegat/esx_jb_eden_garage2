@@ -1,5 +1,5 @@
 --[[ Version Checker ]]--
-local VERSION = "3.2.0"
+local VERSION = "3.3.0"
 
 AddEventHandler("onResourceStart", function(resource)
     if resource == GetCurrentResourceName() then
