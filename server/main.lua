@@ -10,7 +10,7 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb, KindO
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = GetPlayerIdentifiers(_source)[1]
+		identifier = ESX.GetPlayerFromId(_source).identifier
 	end
 
 	MySQL.Async.fetchAll("SELECT vehicle, vehiclename, pound, `stored`, garage_name FROM owned_vehicles WHERE owner = @identifier and type=@vehicle_type", {
@@ -37,7 +37,7 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = GetPlayerIdentifiers(_source)[1]
+		identifier = ESX.GetPlayerFromId(_source).identifier
 	end
 	local vehplate = vehicleProps.plate
 	local vehiclemodel = vehicleProps.model
@@ -68,7 +68,7 @@ ESX.RegisterServerCallback('eden_garage:stockvmecano',function(source,cb, vehicl
 	local _source = source
 	local plate = vehicleProps.plate
 	local vehiclemodel = vehicleProps.model
-	local identifier = GetPlayerIdentifiers(_source)[1]
+	local identifier = ESX.GetPlayerFromId(_source).identifier
 	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles where plate=@plate",{['@plate'] = plate}, function(result)
 		if result[1] ~= nil then
 			local vehprop = json.encode(vehicleProps)
@@ -130,7 +130,7 @@ ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb, Kin
 	if KindOfVehicle ~= "personal" then
 		identifier = KindOfVehicle
 	else
-		identifier = GetPlayerIdentifiers(_source)[1]
+		identifier = ESX.GetPlayerFromId(_source).identifier
 	end
 
 	MySQL.Async.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND (`stored` = FALSE OR pound = TRUE) AND garage_name = @garage_name AND type=@vehicle_type",{
@@ -145,7 +145,7 @@ end)
 --Foonction qui check l'argent
 ESX.RegisterServerCallback('eden_garage:checkMoney', function(source, cb, money)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	if xPlayer.get('money') >= money then
+	if xPlayer.getMoney() >= money then
 		xPlayer.removeMoney(money)
 		cb(true)
 	else
