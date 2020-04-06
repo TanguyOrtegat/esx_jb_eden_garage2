@@ -1,7 +1,7 @@
 {
-  "version":"3.3.0",
+  "version":"3.3.1",
   "patchnote" : [
-	"Update to latest manifest compatibility",
-	"Removed __resource.lua to replace with fxmanifest.lua" 
+	"vehiclename is nonmandatory and default value is null is SQL",
+	"fixed nil value when no cars are stored and you want to take car out"
   ]
 }

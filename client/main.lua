@@ -68,10 +68,10 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				local vehicleHash = vehicleProps.model
 				local vehicleName, vehicleLabel
 								
-				if v.vehiclename == 'vehicle' then
-					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
+				if v.vehiclename then
+					vehicleName = v.vehiclename					
 				else
-					vehicleName = v.vehiclename
+					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				end
 
 				if v.fourrieremecano then
@@ -102,89 +102,91 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 			elements = elements,
 		},
 		function(data, menu)
-			local CarProps = vehiclePropsList[data.current.plate]
-			ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'vehicle_menu', {
-				title    =  data.current.vehicleName,
-				align    = 'top-left',
-				elements = {
-					{label = _U('take_out_car') , value = 'get_vehicle_out'},
-					{label = _U('rename_the_car') , value = 'rename_vehicle'}
-			}}, function(data2, menu2)
-					if data2.current.value == "get_vehicle_out" then
-						local doesVehicleExist = false
-						for k,v in pairs (carInstance) do
-							if ESX.Math.Trim(v.plate) == ESX.Math.Trim(data.current.plate) then
-								if DoesEntityExist(v.vehicleentity) then
-									doesVehicleExist = true
-								else
-									table.remove(carInstance, k)
-									doesVehicleExist = false
+			if data.current.value ~= nil then
+				local CarProps = vehiclePropsList[data.current.plate]
+				ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'vehicle_menu', {
+					title    =  data.current.vehicleName,
+					align    = 'top-left',
+					elements = {
+						{label = _U('take_out_car') , value = 'get_vehicle_out'},
+						{label = _U('rename_the_car') , value = 'rename_vehicle'}
+				}}, function(data2, menu2)
+						if data2.current.value == "get_vehicle_out" then
+							local doesVehicleExist = false
+							for k,v in pairs (carInstance) do
+								if ESX.Math.Trim(v.plate) == ESX.Math.Trim(data.current.plate) then
+									if DoesEntityExist(v.vehicleentity) then
+										doesVehicleExist = true
+									else
+										table.remove(carInstance, k)
+										doesVehicleExist = false
+									end
 								end
 							end
-						end
-                        if (doesVehicleExist) then
-							TriggerEvent('esx:showNotification', _U('cannot_take_out'))
-                        elseif (data.current.fourrieremecano) then
-                            TriggerEvent('esx:showNotification', _U('vehicle_in_pound'))
-                        elseif garage_name ~= data.current.garage_name then
-							local elem = {}
-							table.insert(elem, {label = _U('yes').." $"..tostring(Config.SwitchGaragePrice) , value = 'transfer_yes'})
-							table.insert(elem, {label =_U('no') , value = 'transfer_no'})
-							ESX.UI.Menu.Open(
-								'default', GetCurrentResourceName(), 'transfer_menu',
-								{
-									title    =  _U('want_to_transfer')..": "..data.current.vehicleName.._U('to_your_garage'),
-									align    = 'top-left',
-									elements = elem,
-								},
-								function(data3, menu3)
-									if data3.current.value == "transfer_yes" then 
-										ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
-											if hasEnoughMoney then
-												TriggerServerEvent("esx_eden_garage:MoveGarage",data.current.plate, garage_name)
-												SpawnVehicle(CarProps, garage, KindOfVehicle)
-												ESX.UI.Menu.CloseAll()
-											else
-												ESX.ShowNotification(_U('not_enough_money'))
-											end
-										end, Config.SwitchGaragePrice)
-									else
-										menu2.close()
+							if (doesVehicleExist) then
+								TriggerEvent('esx:showNotification', _U('cannot_take_out'))
+							elseif (data.current.fourrieremecano) then
+								TriggerEvent('esx:showNotification', _U('vehicle_in_pound'))
+							elseif garage_name ~= data.current.garage_name then
+								local elem = {}
+								table.insert(elem, {label = _U('yes').." $"..tostring(Config.SwitchGaragePrice) , value = 'transfer_yes'})
+								table.insert(elem, {label =_U('no') , value = 'transfer_no'})
+								ESX.UI.Menu.Open(
+									'default', GetCurrentResourceName(), 'transfer_menu',
+									{
+										title    =  _U('want_to_transfer')..": "..data.current.vehicleName.._U('to_your_garage'),
+										align    = 'top-left',
+										elements = elem,
+									},
+									function(data3, menu3)
+										if data3.current.value == "transfer_yes" then 
+											ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
+												if hasEnoughMoney then
+													TriggerServerEvent("esx_eden_garage:MoveGarage",data.current.plate, garage_name)
+													SpawnVehicle(CarProps, garage, KindOfVehicle)
+													ESX.UI.Menu.CloseAll()
+												else
+													ESX.ShowNotification(_U('not_enough_money'))
+												end
+											end, Config.SwitchGaragePrice)
+										else
+											menu2.close()
+											menu3.close()
+										end
+									end,
+									function(data3, menu3)
 										menu3.close()
 									end
-								end,
-								function(data3, menu3)
+								)
+							elseif (data.current.stored) then
+								SpawnVehicle(CarProps, garage, KindOfVehicle)
+								ESX.UI.Menu.CloseAll()
+							else
+								TriggerEvent('esx:showNotification', _U('vehicle_already_out'))
+							end
+						elseif data2.current.value == "rename_vehicle" then
+							ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'rename_vehicle', {
+								title = _U('desired_name')
+							}, function(data3, menu3)
+								if string.len(data3.value) >= 1 then
+									TriggerServerEvent('eden_garage:renamevehicle', data.current.plate, data3.value)
+									ESX.UI.Menu.CloseAll()
+									ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
+								else
+									ESX.ShowNotification(_U('cannot_be_empty'))
 									menu3.close()
 								end
-							)
-						elseif (data.current.stored) then
-                            SpawnVehicle(CarProps, garage, KindOfVehicle)
-							ESX.UI.Menu.CloseAll()
-                        else
-                            TriggerEvent('esx:showNotification', _U('vehicle_already_out'))
-                        end
-					elseif data2.current.value == "rename_vehicle" then
-						ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'rename_vehicle', {
-							title = _U('desired_name')
-						}, function(data3, menu3)
-							if string.len(data3.value) >= 1 then
-								TriggerServerEvent('eden_garage:renamevehicle', data.current.plate, data3.value)
-								ESX.UI.Menu.CloseAll()
-								ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
-							else
-								ESX.ShowNotification(_U('cannot_be_empty'))
-								menu3.close()
-							end
 
-						end, function(data3, menu3)
-							menu3.close()
-						end)
+							end, function(data3, menu3)
+								menu3.close()
+							end)
+						end
+					end,
+					function(data2, menu2)
+						menu2.close()
 					end
-				end,
-				function(data2, menu2)
-					menu2.close()
-				end
-			)
+				)
+			end
 		end,
 		function(data, menu)
 			menu.close()
@@ -367,10 +369,10 @@ function ReturnVehicleMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				local vehicleHash = vehicleProps.model
 				local vehicleName, vehicleLabel
 
-				if v.vehiclename == 'vehicle' then
-					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
+				if v.vehiclename then
+					vehicleName = v.vehiclename					
 				else
-					vehicleName = v.vehiclename
+					vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 				end
 
 				if v.fourrieremecano then

@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `owned_vehicles` (
   `stored` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'State of the vehicle',
   `garage_name` varchar(50) NOT NULL DEFAULT 'Garage_Centre',
   `pound` tinyint(1) NOT NULL DEFAULT '0',
-  `vehiclename` varchar(50) NOT NULL DEFAULT 'vehicle',
+  `vehiclename` varchar(50),
   `plate` varchar(50) NOT NULL,
   `type` varchar(10) NOT NULL DEFAULT 'car',
   `job` varchar(50),
