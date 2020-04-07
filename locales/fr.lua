@@ -56,4 +56,5 @@ Locales['fr'] = {
 	['vehicle_in_pound']		= 'Le véhicule est rentré dans la fourrière',
 	['no_vehicle_out']			= 'Pas de véhicule a sortir',
 	['see_police_mechanic']		= 'Va voir la police ou mecano pour savoir comment recuperer ton véhicule.',
+	['vehicle_error']			= 'Véhicule non existant',
 }

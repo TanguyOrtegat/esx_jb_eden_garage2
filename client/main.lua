@@ -123,10 +123,10 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 									end
 								end
 							end
-							if (doesVehicleExist) then
-								TriggerEvent('esx:showNotification', _U('cannot_take_out'))
+							if (doesVehicleExist) or DoesAPlayerDrivesCar(data.current.plate) then
+								ESX.ShowNotification(_U('cannot_take_out'))
 							elseif (data.current.fourrieremecano) then
-								TriggerEvent('esx:showNotification', _U('vehicle_in_pound'))
+								ESX.ShowNotification(_U('vehicle_in_pound'))
 							elseif garage_name ~= data.current.garage_name then
 								local elem = {}
 								table.insert(elem, {label = _U('yes').." $"..tostring(Config.SwitchGaragePrice) , value = 'transfer_yes'})
@@ -162,7 +162,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 								SpawnVehicle(CarProps, garage, KindOfVehicle)
 								ESX.UI.Menu.CloseAll()
 							else
-								TriggerEvent('esx:showNotification', _U('vehicle_already_out'))
+								ESX.ShowNotification(_U('vehicle_already_out'))
 							end
 						elseif data2.current.value == "rename_vehicle" then
 							ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'rename_vehicle', {
@@ -226,7 +226,6 @@ function ListVehiclesFourriereMenu(garage)
 		end, function(data, menu)
 			menu.close()
 		end)
-
 	end)
 end
 -- Fin Afficher les listes des vehicules de fourriere
@@ -240,46 +239,53 @@ function StockVehicleMenu(KindOfVehicle, garage_name, vehicle_type)
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
 			if GotTrailer then
-				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
-				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
-					if(valid) then
-						for k,v in pairs (carInstance) do
-							if ESX.Math.Trim(v.plate) == ESX.Math.Trim(trailerProps.plate) then
-								table.remove(carInstance, k)
+				local trailerProps  = GetVehicleProperties(TrailerHandle)
+				if trailerProps ~= nil then
+					ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
+						if(valid) then
+							for k,v in pairs (carInstance) do
+								if ESX.Math.Trim(v.plate) == ESX.Math.Trim(trailerProps.plate) then
+									table.remove(carInstance, k)
+								end
 							end
+							DeleteEntity(TrailerHandle)
+							TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
+							TriggerServerEvent("esx_eden_garage:MoveGarage", trailerProps.plate, garage_name)
+							ESX.ShowNotification(_U('trailer_in_garage'))
+						else
+							ESX.ShowNotification(_U('cannot_store_vehicle'))
 						end
-						DeleteEntity(TrailerHandle)
-						TriggerServerEvent('eden_garage:modifystate', trailerProps.plate, true)
-						TriggerServerEvent("esx_eden_garage:MoveGarage", trailerProps.plate, garage_name)
-						TriggerEvent('esx:showNotification', _U('trailer_in_garage'))
-					else
-						TriggerEvent('esx:showNotification', _U('cannot_store_vehicle'))
-					end
-				end,trailerProps, KindOfVehicle, garage_name, vehicle_type)
+					end,trailerProps, KindOfVehicle, garage_name, vehicle_type)
+				else
+					ESX.ShowNotification(_U('vehicle_error'))
+				end
 			else
-				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
-				print(json.encode(vehicleProps))
-				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
-					if(valid) then
-						for k,v in pairs (carInstance) do
-							if ESX.Math.Trim(v.plate) == ESX.Math.Trim(vehicleProps.plate) then
-								table.remove(carInstance, k)
+				local vehicleProps  = GetVehicleProperties(vehicle)
+				if vehicleProps ~= nil then
+					ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
+						if(valid) then
+							for k,v in pairs (carInstance) do
+								if ESX.Math.Trim(v.plate) == ESX.Math.Trim(vehicleProps.plate) then
+									table.remove(carInstance, k)
+								end
 							end
+							DeleteEntity(vehicle)
+							TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
+							TriggerServerEvent("esx_eden_garage:MoveGarage", vehicleProps.plate, garage_name)
+							ESX.ShowNotification(_U('vehicle_in_garage'))
+						else
+							ESX.ShowNotification(_U('cannot_store_vehicle'))
 						end
-						DeleteEntity(vehicle)
-						TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, true)
-						TriggerServerEvent("esx_eden_garage:MoveGarage", vehicleProps.plate, garage_name)
-						TriggerEvent('esx:showNotification', _U('vehicle_in_garage'))
-					else
-						TriggerEvent('esx:showNotification', _U('cannot_store_vehicle'))
-					end
-				end,vehicleProps, KindOfVehicle, garage_name, vehicle_type)
+					end,vehicleProps, KindOfVehicle, garage_name, vehicle_type)
+				else
+					ESX.ShowNotification(_U('vehicle_error'))
+				end
 			end
 		else
-			TriggerEvent('esx:showNotification', _U('not_driver'))
+			ESX.ShowNotification(_U('not_driver'))
 		end
 	else
-		TriggerEvent('esx:showNotification', _U('no_vehicle_to_enter'))
+		ESX.ShowNotification(_U('no_vehicle_to_enter'))
 	end
 end
 -- Fin fonction qui permet de rentrer un vehicule 
@@ -292,33 +298,41 @@ function StockVehicleFourriereMenu()
 		if GetPedInVehicleSeat(vehicle, -1) == playerPed then
 			local GotTrailer, TrailerHandle = GetVehicleTrailerVehicle(vehicle)
 			if GotTrailer then
-				local trailerProps  = ESX.Game.GetVehicleProperties(TrailerHandle)
-				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
-					if(valid) then
-						DeleteVehicle(TrailerHandle)
-						TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', trailerProps, true)
-						TriggerEvent('esx:showNotification', _U('trailer_in_pound'))
-					else
-						TriggerEvent('esx:showNotification', _U('cannot_store_pound'))
-					end
-				end,trailerProps)
+				local trailerProps  = GetVehicleProperties(TrailerHandle)
+				if trailerProps ~= nil then
+					ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
+						if(valid) then
+							DeleteVehicle(TrailerHandle)
+							TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', trailerProps, true)
+							ESX.ShowNotification(_U('trailer_in_pound'))
+						else
+							ESX.ShowNotification(_U('cannot_store_pound'))
+						end
+					end,trailerProps)
+				else
+					ESX.ShowNotification(_U('vehicle_error'))
+				end
 			else
-				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
-				ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
-					if(valid) then
-						DeleteVehicle(vehicle)
-						TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, true)
-						TriggerEvent('esx:showNotification', _U('vehicle_in_pound'))
-					else
-						TriggerEvent('esx:showNotification', _U('cannot_store_pound'))
-					end
-				end,vehicleProps)
+				local vehicleProps  = GetVehicleProperties(vehicle)
+				if vehicleProps ~= nil then
+					ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
+						if(valid) then
+							DeleteVehicle(vehicle)
+							TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, true)
+							ESX.ShowNotification(_U('vehicle_in_pound'))
+						else
+							ESX.ShowNotification(_U('cannot_store_pound'))
+						end
+					end,vehicleProps)
+				else
+					ESX.ShowNotification(_U('vehicle_error'))
+				end
 			end
 		else
-			TriggerEvent('esx:showNotification', _U('not_driver'))
+			ESX.ShowNotification(_U('not_driver'))
 		end
 	else
-		TriggerEvent('esx:showNotification', _U('no_vehicle_to_enter'))
+		ESX.ShowNotification(_U('no_vehicle_to_enter'))
 	end
 end
 -- Fin fonction qui permet de rentrer un vehicule dans fourriere
@@ -326,13 +340,13 @@ end
 
 
 --Fonction pour spawn vehicule
-function SpawnVehicle(vehicle, garage, KindOfVehicle)
-	ESX.Game.SpawnVehicle(vehicle.model, {
+function SpawnVehicle(vehicleProps, garage, KindOfVehicle)
+	ESX.Game.SpawnVehicle(vehicleProps.model, {
 		x = garage.SpawnPoint.Pos.x,
 		y = garage.SpawnPoint.Pos.y,
 		z = garage.SpawnPoint.Pos.z + 1											
 		},garage.SpawnPoint.Heading, function(callback_vehicle)
-			ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
+			SetVehicleProperties(callback_vehicle, vehicleProps)
 			TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
 			local carplate = GetVehicleNumberPlateText(callback_vehicle)
 			table.insert(carInstance, {vehicleentity = callback_vehicle, plate = carplate})
@@ -341,21 +355,21 @@ function SpawnVehicle(vehicle, garage, KindOfVehicle)
 				TriggerEvent('esx_jobs2:addplate', carplate)
 			end	
 		end)
-	TriggerServerEvent('eden_garage:modifystate', vehicle.plate, false)
+	TriggerServerEvent('eden_garage:modifystate', vehicleProps.plate, false)
 end
 --Fin fonction pour spawn vehicule
 
 --Fonction pour spawn vehicule fourriere mecano
-function SpawnVehicleMecano(vehicle, garage)
-	ESX.Game.SpawnVehicle(vehicle.model, {
+function SpawnVehicleMecano(vehicleProps, garage)
+	ESX.Game.SpawnVehicle(vehicleProps.model, {
 		x = garage.SpawnPoint.Pos.x,
 		y = garage.SpawnPoint.Pos.y,
 		z = garage.SpawnPoint.Pos.z + 1											
 		},garage.SpawnPoint.Heading, function(callback_vehicle)
-			ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
+			SetVehicleProperties(callback_vehicle, vehicleProps)
 			TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
 		end)
-	TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicle, false)
+	TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, false)
 end
 --Fin fonction pour spawn vehicule fourriere mecano
 
@@ -415,7 +429,7 @@ function ReturnVehicleMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 						end
 					end
 				end
-				if not doesVehicleExist then
+				if not doesVehicleExist and not DoesAPlayerDrivesCar(data.current.plate) then
 					ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
 						if hasEnoughMoney then
 							menu.close()
@@ -438,6 +452,100 @@ end
 
 function exitmarker()
 	ESX.UI.Menu.CloseAll()
+end
+
+function DoesAPlayerDrivesCar(plate)
+	local isVehicleTaken = false
+	local players  = ESX.Game.GetPlayers()
+	for i=1, #players, 1 do
+		local target = GetPlayerPed(players[i])
+		if target ~= PlayerPedId() then
+			local plate1 = GetVehicleNumberPlateText(GetVehiclePedIsIn(target, true))
+			local plate2 = GetVehicleNumberPlateText(GetVehiclePedIsIn(target, false))
+			if plate == plate1 or plate == plate2 then
+				isVehicleTaken = true
+				break
+			end
+		end
+	end
+	return isVehicleTaken
+end
+
+function SetVehicleProperties(vehicle, vehicleProps)
+    ESX.Game.SetVehicleProperties(vehicle, vehicleProps)
+
+    if vehicleProps["windows"] then
+        for windowId = 1, 13, 1 do
+            if vehicleProps["windows"][windowId] == false then
+                SmashVehicleWindow(vehicle, windowId)
+            end
+        end
+    end
+
+    if vehicleProps["tyres"] then
+        for tyreId = 1, 7, 1 do
+            if vehicleProps["tyres"][tyreId] ~= false then
+                SetVehicleTyreBurst(vehicle, tyreId, true, 1000)
+            end
+        end
+    end
+
+    if vehicleProps["doors"] then
+        for doorId = 0, 5, 1 do
+            if vehicleProps["doors"][doorId] ~= false then
+                SetVehicleDoorBroken(vehicle, doorId - 1, true)
+            end
+        end
+    end
+end
+
+function GetVehicleProperties(vehicle)
+    if DoesEntityExist(vehicle) then
+        local vehicleProps = ESX.Game.GetVehicleProperties(vehicle)
+
+        vehicleProps["tyres"] = {}
+        vehicleProps["windows"] = {}
+        vehicleProps["doors"] = {}
+
+        for id = 1, 7 do
+            local tyreId = IsVehicleTyreBurst(vehicle, id, false)
+        
+            if tyreId then
+                vehicleProps["tyres"][#vehicleProps["tyres"] + 1] = tyreId
+        
+                if tyreId == false then
+                    tyreId = IsVehicleTyreBurst(vehicle, id, true)
+                    vehicleProps["tyres"][ #vehicleProps["tyres"]] = tyreId
+                end
+            else
+                vehicleProps["tyres"][#vehicleProps["tyres"] + 1] = false
+            end
+        end
+
+        for id = 1, 13 do
+            local windowId = IsVehicleWindowIntact(vehicle, id)
+
+            if windowId ~= nil then
+                vehicleProps["windows"][#vehicleProps["windows"] + 1] = windowId
+            else
+                vehicleProps["windows"][#vehicleProps["windows"] + 1] = true
+            end
+        end
+        
+        for id = 0, 5 do
+            local doorId = IsVehicleDoorDamaged(vehicle, id)
+        
+            if doorId then
+                vehicleProps["doors"][#vehicleProps["doors"] + 1] = doorId
+            else
+                vehicleProps["doors"][#vehicleProps["doors"] + 1] = false
+            end
+        end
+
+        return vehicleProps
+	else
+		return nil
+    end
 end
 
 RegisterNetEvent("ft_libs:OnClientReady")
@@ -807,7 +915,6 @@ AddEventHandler('ft_libs:OnClientReady', function()
 	end
 	for k,v in pairs (Config.SocietyGarages) do
 		for key, value in pairs (v) do
-			--print(dump("esx_eden_garage_area_"..k.."_garage_society_"..key))
 			exports.ft_libs:AddArea("esx_eden_garage_area_"..k.."_garage_society_"..key, {
 				enable = false,
 				marker = {
@@ -910,31 +1017,6 @@ AddEventHandler('ft_libs:OnClientReady', function()
 end)
 
 -- Fin controle touche
-function dump(o, nb)
-  if nb == nil then
-    nb = 0
-  end
-   if type(o) == 'table' then
-      local s = ''
-      for i = 1, nb + 1, 1 do
-        s = s .. "    "
-      end
-      s = '{\n'
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-          for i = 1, nb, 1 do
-            s = s .. "    "
-          end
-         s = s .. '['..k..'] = ' .. dump(v, nb + 1) .. ',\n'
-      end
-      for i = 1, nb, 1 do
-        s = s .. "    "
-      end
-      return s .. '}'
-   else
-      return tostring(o)
-   end
-end
 
 function table.empty (self)
     for _, _ in pairs(self) do
