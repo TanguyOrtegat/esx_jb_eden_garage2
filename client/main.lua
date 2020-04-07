@@ -258,6 +258,7 @@ function StockVehicleMenu(KindOfVehicle, garage_name, vehicle_type)
 				end,trailerProps, KindOfVehicle, garage_name, vehicle_type)
 			else
 				local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+				print(json.encode(vehicleProps))
 				ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 					if(valid) then
 						for k,v in pairs (carInstance) do
