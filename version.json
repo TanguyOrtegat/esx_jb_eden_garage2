@@ -1,9 +1,10 @@
 {
-  "version":"3.3.2",
+  "version":"3.3.3",
   "patchnote" : [
 	"vehiclename is nonmandatory and default value is null is SQL",
 	"fixed nil value when no cars are stored and you want to take car out",
 	"adapting the script for version 1.2.0 !!! update mandatory",
-	"fixed money"
+	"fixed money",
+	"fix small issue"
   ]
 }

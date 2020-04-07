@@ -92,7 +92,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 				
 			end
 		else
-			table.insert(elements, {label = _U('no_cars_stored')})
+			table.insert(elements, {label = _U('no_cars_stored'), value = "nocar"})
 		end
 		ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'spawn_vehicle',
@@ -102,7 +102,7 @@ function ListVehiclesMenu(garage, KindOfVehicle, garage_name, vehicle_type)
 			elements = elements,
 		},
 		function(data, menu)
-			if data.current.value ~= nil then
+			if data.current.value ~= "nocar" then
 				local CarProps = vehiclePropsList[data.current.plate]
 				ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'vehicle_menu', {
 					title    =  data.current.vehicleName,
