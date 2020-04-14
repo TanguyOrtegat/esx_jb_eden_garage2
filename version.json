@@ -1,11 +1,6 @@
 {
-  "version":"4.0.0",
+  "version":"4.0.1",
   "patchnote" : [
-	"vehiclename is nonmandatory and default value is null is SQL",
-	"fixed nil value when no cars are stored and you want to take car out",
-	"adapting the script for version 1.2.0 !!! update mandatory",
-	"fixed money",
-	"tried fixing society garage when other player takes out a vehicle",
-	"when getting out a car: tyres, windows, doors will be broken"
+	"Added saving vehicle headlightcolor"
   ]
 }

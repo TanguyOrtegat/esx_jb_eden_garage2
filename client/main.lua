@@ -497,6 +497,7 @@ function SetVehicleProperties(vehicle, vehicleProps)
             end
         end
     end
+	vehicleProps["vehicleHeadLight"]  = GetVehicleHeadlightsColour(vehicle)
 end
 
 function GetVehicleProperties(vehicle)
@@ -541,6 +542,7 @@ function GetVehicleProperties(vehicle)
                 vehicleProps["doors"][#vehicleProps["doors"] + 1] = false
             end
         end
+		if vehicleProps.vehicleHeadLight then SetVehicleHeadlightsColour(vehicle, props.vehicleHeadLight) end
 
         return vehicleProps
 	else
