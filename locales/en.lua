@@ -57,4 +57,5 @@ Locales['en'] = {
 	['no_vehicle_out']			= 'No vehicle to take out',
 	['see_police_mechanic']		= 'Check with the police or mechanic to find out how to get your car back',
 	['vehicle_error']			= 'Error finding vehicle',
+	['society']					= 'Society ',	
 }

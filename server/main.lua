@@ -24,7 +24,12 @@ end)
 
 --Recupere les véhicules
 ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
-	MySQL.Async.fetchAll("SELECT vehicle FROM owned_vehicles INNER JOIN characters ON owned_vehicles.owner = characters.identifier WHERE pound = TRUE", {}, function(result)
+	MySQL.Async.fetchAll([[SELECT owned_vehicles.*, users.firstname, users.lastname, jobs.label as joblabel FROM owned_vehicles 
+		left JOIN users 
+		ON owned_vehicles.owner = users.identifier 
+		left outer JOIN jobs 
+		ON owned_vehicles.owner = jobs.name 
+		WHERE WHERE pound = TRUE]], { }, function(result)
 		cb(result)
 	end)
 end)

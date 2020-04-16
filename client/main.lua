@@ -208,10 +208,17 @@ function ListVehiclesFourriereMenu(garage)
 			local vehicleHash = vehicleProps.model
 			local vehicleName = GetDisplayNameFromVehicleModel(vehicleHash)
 
-			table.insert(elements, {
-				label = ('%s | %s %s'):format(vehicleName, v.firstname, v.lastname),
-				plate = vehicleProps.plate
-			})
+			if string.match(v.owner, 'steam:') then
+				table.insert(elements, {
+					label = ('%s | %s %s'):format(vehicleName, v.firstname, v.lastname),
+					plate = vehicleProps.plate
+				})
+			else
+				table.insert(elements, {
+					label = ('%s | %s %s'):format(vehicleName, _("society"), v.joblabel),
+					plate = vehicleProps.plate
+				})
+			end
 		end
 
 		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'spawn_vehicle_mecano', {

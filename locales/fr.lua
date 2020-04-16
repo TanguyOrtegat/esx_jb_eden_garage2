@@ -57,4 +57,5 @@ Locales['fr'] = {
 	['no_vehicle_out']			= 'Pas de véhicule a sortir',
 	['see_police_mechanic']		= 'Va voir la police ou mecano pour savoir comment recuperer ton véhicule.',
 	['vehicle_error']			= 'Véhicule non existant',
+	['society']					= 'Société ',
 }
