@@ -222,7 +222,7 @@ function ListVehiclesFourriereMenu(garage)
 			local vehicleProps = vehiclePropsList[data.current.plate]
 			menu.close()
 			SpawnVehicleMecano(vehicleProps, garage)
-			TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, false)
+			TriggerServerEvent('eden_garage:ChangeStateFrompound', vehicleProps, false)
 		end, function(data, menu)
 			menu.close()
 		end)
@@ -303,7 +303,7 @@ function StockVehicleFourriereMenu()
 					ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
 						if(valid) then
 							DeleteVehicle(TrailerHandle)
-							TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', trailerProps, true)
+							TriggerServerEvent('eden_garage:ChangeStateFrompound', trailerProps, true)
 							ESX.ShowNotification(_U('trailer_in_pound'))
 						else
 							ESX.ShowNotification(_U('cannot_store_pound'))
@@ -318,7 +318,7 @@ function StockVehicleFourriereMenu()
 					ESX.TriggerServerCallback('eden_garage:stockvmecano',function(valid)
 						if(valid) then
 							DeleteVehicle(vehicle)
-							TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, true)
+							TriggerServerEvent('eden_garage:ChangeStateFrompound', vehicleProps, true)
 							ESX.ShowNotification(_U('vehicle_in_pound'))
 						else
 							ESX.ShowNotification(_U('cannot_store_pound'))
@@ -369,7 +369,7 @@ function SpawnVehicleMecano(vehicleProps, garage)
 			SetVehicleProperties(callback_vehicle, vehicleProps)
 			TaskWarpPedIntoVehicle(PlayerPedId(), callback_vehicle, -1)
 		end)
-	TriggerServerEvent('eden_garage:ChangeStateFromFourriereMecano', vehicleProps, false)
+	TriggerServerEvent('eden_garage:ChangeStateFrompound', vehicleProps, false)
 end
 --Fin fonction pour spawn vehicule fourriere mecano
 
