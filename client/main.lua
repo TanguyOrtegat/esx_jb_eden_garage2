@@ -482,7 +482,7 @@ function SetVehicleProperties(vehicle, vehicleProps)
     ESX.Game.SetVehicleProperties(vehicle, vehicleProps)
 
     if vehicleProps["windows"] then
-        for windowId = 1, 13, 1 do
+        for windowId = 1, 9, 1 do
             if vehicleProps["windows"][windowId] == false then
                 SmashVehicleWindow(vehicle, windowId)
             end
@@ -531,7 +531,7 @@ function GetVehicleProperties(vehicle)
             end
         end
 
-        for id = 1, 13 do
+        for id = 1,  do
             local windowId = IsVehicleWindowIntact(vehicle, id)
 
             if windowId ~= nil then
