@@ -531,7 +531,7 @@ function GetVehicleProperties(vehicle)
             end
         end
 
-        for id = 1,  do
+        for id = 0, 3 do
             local windowId = IsVehicleWindowIntact(vehicle, id)
 
             if windowId ~= nil then
