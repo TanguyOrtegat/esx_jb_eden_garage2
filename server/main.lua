@@ -29,7 +29,7 @@ ESX.RegisterServerCallback('eden_garage:getVehiclesMecano', function(source, cb)
 		ON owned_vehicles.owner = users.identifier 
 		left outer JOIN jobs 
 		ON owned_vehicles.owner = jobs.name 
-		WHERE WHERE pound = TRUE]], { }, function(result)
+		WHERE pound = TRUE]], { }, function(result)
 		cb(result)
 	end)
 end)
