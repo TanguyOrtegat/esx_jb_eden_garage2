@@ -161,7 +161,7 @@ end)
 
 -- Fonction qui change les etats sorti en rentré lors d'un restart
 if Config.StoreOnServerStart then
-	AddEventHandler('onMySQLReady', function()
+	MySQL.ready(function ()
 
 		MySQL.Async.execute("UPDATE owned_vehicles SET `stored`=true WHERE `stored`=false", {})
 
